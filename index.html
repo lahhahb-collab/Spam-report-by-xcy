@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>XY PLUGINZ - XCY SYSTEM</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- FONTAWESOME IKON VECTOR -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- LIBRARY ANIMASI SCROLL (AOS) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --yellow-bg: #ffcc00;
+      --card-bg: #ffd633;
+      --dark-border: #000000;
+      --white-card: #ffffff;
+      --orange-accent: #ff9900;
+      --red-accent: #ff4d4d;
+      --green-accent: #00cc66;
+      --muted: #444444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--yellow-bg);
+      background-image: radial-gradient(#d4a700 1.2px, transparent 1.2px);
+      background-size: 16px 16px;
+      color: #000;
+      padding-bottom: 90px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-tech {
+      font-family: 'Chakra Petch', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hidden { display: none !important; }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 3px solid rgba(0,0,0,0.3);
+      border-radius: 50%;
+      border-top-color: #000;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* CUSTOM NOTIFICATION TOAST POPUP (ANTI SPAM) */
+    #customToastContainer {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999999;
+      width: 90%;
+      max-width: 380px;
+      pointer-events: none;
+    }
+
+    .custom-toast {
+      background: #ffffff;
+      color: #000000;
+      border: 3px solid var(--dark-border);
+      box-shadow: 4px 4px 0px var(--dark-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      animation: toastIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes toastIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* AUTH OVERLAY MODAL */
+    #authOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: var(--yellow-bg);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-box {
+      background: #ffffff;
+      border: 3px solid var(--dark-border);
+      box-shadow: 5px 5px 0px var(--dark-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
+    }
+
+    /* TOP HEADER NAVBAR */
+    .top-header {
+      background: var(--yellow-bg);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2.5px solid var(--dark-border);
+    }
+
+    .header-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .header-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .user-icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 2.5px solid var(--dark-border);
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* SIDEBAR DRAWER */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .side-drawer {
+      position: fixed;
+      top: 0; left: -280px;
+      width: 270px; height: 100vh;
+      background: #ffffff;
+      border-right: 3.5px solid var(--dark-border);
+      z-index: 10000;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-drawer.active {
+      left: 0;
+    }
+
+    .drawer-header {
+      background: var(--yellow-bg);
+      border-bottom: 3px solid var(--dark-border);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drawer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2.5px solid var(--dark-border);
+      background: #ffb3b3;
+      overflow: hidden;
+    }
+
+    .drawer-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .drawer-menu-list {
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-item {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .drawer-item:hover {
+      background: var(--card-bg);
+    }
+
+    .drawer-item i {
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* CONTAINER LAYOUT */
+    .app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* HERO BANNER */
+    .hero-banner {
+      background: linear-gradient(135deg, #1e1b4b, #312e81, #4338ca);
+      border: 3px solid var(--dark-border);
+      border-radius: 18px;
+      box-shadow: 4px 4px 0px var(--dark-border);
+      padding: 18px;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .hero-banner h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      text-shadow: 2px 2px 0px #000;
+      margin-bottom: 6px;
+    }
+
+    .badge-powered {
+      display: inline-block;
+      background: var(--orange-accent);
+      color: #000000;
+      border: 2px solid var(--dark-border);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      width: fit-content;
+      box-shadow: 2px 2px 0px var(--dark-border);
+    }
+
+    /* WELCOME & USER CARD */
+    .user-card {
+      background: var(--card-bg);
+      border: 3px solid var(--dark-border);
+      border-radius: 18px;
+      box-shadow: 4px 4px 0px var(--dark-border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .user-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2.5px solid var(--dark-border);
+      background: #ffb3b3;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    .user-info-text { display: flex; flex-direction: column; }
+    .welcome-subtitle { font-size: 0.78rem; color: #333; font-weight: 700; }
+    .user-name-title { font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+    .verified-icon { color: #00a8ff; font-size: 0.85rem; }
+    
+    .role-badge {
+      background: #000;
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      width: fit-content;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* STATS INNER ROW */
+    .stats-row {
+      background: var(--white-card);
+      border: 2.5px solid var(--dark-border);
+      border-radius: 12px;
+      padding: 10px 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      text-align: center;
+      align-items: center;
+    }
+
+    .stat-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      border-right: 2px solid var(--dark-border);
+    }
+
+    .stat-col:last-child { border-right: none; }
+    .stat-col i { font-size: 0.95rem; color: #000; }
+    .stat-val { font-size: 0.78rem; font-weight: 800; }
+    .stat-lbl { font-size: 0.68rem; color: var(--muted); font-weight: 700; }
+
+    /* FEATURE CARDS ROW */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .feat-card {
+      border: 3px solid var(--dark-border);
+      border-radius: 14px;
+      box-shadow: 3px 3px 0px var(--dark-border);
+      padding: 14px;
+      height: 85px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .feat-card i { font-size: 1.2rem; }
+    .feat-orange { background: var(--orange-accent); }
+    .feat-red { background: var(--red-accent); }
+
+    .section-label {
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    /* QUICK ACTION GRID */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .quick-box {
+      background: var(--white-card);
+      border: 2.5px solid var(--dark-border);
+      border-radius: 12px;
+      box-shadow: 3px 3px 0px var(--dark-border);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 80px;
+      cursor: pointer;
+    }
+
+    .quick-box i { font-size: 1.1rem; color: #000; }
+    .quick-orange { background: var(--orange-accent); }
+    .quick-title { font-size: 0.75rem; font-weight: 800; line-height: 1.2; }
+
+    /* SENDER SELECTOR GRID */
+    .sender-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .sender-select-card {
+      background: #ffffff;
+      border: 2.5px solid var(--dark-border);
+      box-shadow: 3px 3px 0px var(--dark-border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .sender-select-card.active {
+      background: var(--orange-accent);
+      color: #000;
+    }
+
+    /* FORM STYLES */
+    .form-group { margin-bottom: 10px; }
+    label { display: block; font-size: 0.72rem; font-weight: 800; margin-bottom: 4px; }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #fff;
+      border: 2.5px solid var(--dark-border);
+      border-radius: 10px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    button.btn-neubrutal {
+      width: 100%;
+      padding: 12px;
+      background: #000;
+      color: #fff;
+      border: 2.5px solid var(--dark-border);
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--dark-border);
+    }
+
+    /* TERMINAL LOG DISPLAY */
+    .terminal-box {
+      background: #111111;
+      color: #00ff66;
+      border: 3px solid var(--dark-border);
+      border-radius: 14px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      height: 170px;
+      overflow-y: auto;
+      box-shadow: 4px 4px 0px var(--dark-border);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--yellow-bg);
+      border-top: 3px solid var(--dark-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #000;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .nav-tab i { font-size: 1.2rem; }
+    .nav-tab.active { opacity: 1; color: var(--orange-accent); }
+
+    /* NO SENDER VIEW */
+    .no-sender-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 50px 20px;
+      gap: 14px;
+    }
+
+    .phone-circle-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--orange-accent);
+      border: 3.5px solid var(--dark-border);
+      box-shadow: 4px 4px 0px var(--dark-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .no-sender-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .no-sender-sub {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      max-width: 280px;
+      line-height: 1.4;
+    }
+
+    .btn-add-sender {
+      background: var(--yellow-bg);
+      border: 2.5px solid var(--dark-border);
+      box-shadow: 3px 3px 0px var(--dark-border);
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .fab-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--orange-accent);
+      border: 3.5px solid var(--dark-border);
+      box-shadow: 3px 3px 0px var(--dark-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    /* MODAL POPUPS */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.6);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border: 3.5px solid var(--dark-border);
+      box-shadow: 6px 6px 0px var(--dark-border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-yellow-icon {
+      background: var(--card-bg);
+      border: 2.5px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-yellow-icon i { color: #000; }
+
+    .input-yellow-icon input {
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    .code-box-black {
+      background: #111111;
+      color: var(--yellow-bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin: 8px 0;
+    }
+
+    /* CONNECTED SENDER CARD */
+    .sender-item-card {
+      background: #ffffff;
+      border: 3.5px solid var(--dark-border);
+      box-shadow: 5px 5px 0px var(--dark-border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sender-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sender-badge-connected {
+      background: var(--green-accent);
+      color: #fff;
+      border: 2px solid var(--dark-border);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+<!-- WIDGET CONTAINER NOTIFIKASI CUSTOM (TOAST ANTI SPAM) -->
+<div id="customToastContainer"></div>
+
+<!-- AUTH OVERLAY -->
+<div id="authOverlay">
+  <div class="auth-box">
+    <h2 class="font-tech" style="margin-bottom: 6px;">Login System</h2>
+    <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; font-weight: 700;">Masuk untuk melanjutkan.</p>
+    <div class="form-group">
+      <label class="font-tech">Username</label>
+      <input type="text" id="loginUser">
+    </div>
+    <div class="form-group">
+      <label class="font-tech">Password</label>
+      <input type="password" id="loginPass">
+    </div>
+    <button class="btn-neubrutal font-tech" onclick="handleLogin()">LOGIN</button>
+  </div>
+</div>
+
+<!-- SIDEBAR DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- SIDEBAR DRAWER -->
+<div class="side-drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <div class="drawer-avatar">
+      <img src="https://api.dicebear.com/7.x/bottts/svg?seed=xcyvip" alt="Avatar">
+    </div>
+    <div>
+      <div class="font-tech" style="font-weight: 800; font-size: 1.1rem;" id="drawerUsername">USERNAME</div>
+      <div class="role-badge font-tech" id="drawerRole">ROLE</div>
+    </div>
+  </div>
+
+  <div class="drawer-menu-list font-tech">
+    <div class="drawer-item" id="drawerConsoleBtn" onclick="openGlobalModal(); closeDrawer();">
+      <i class="fa-solid fa-box-archive"></i>
+      <span>CONSOLE KODE RENDEM</span>
+    </div>
+    <div class="drawer-item" onclick="openChangePasswordModal(); closeDrawer();">
+      <i class="fa-solid fa-lock"></i>
+      <span>UBAH PASSWORD</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOP HEADER -->
+<div class="top-header">
+  <button class="header-btn" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
+  <div class="header-title font-tech" id="headerTitle">XY PLUGINZ</div>
+  <div class="user-icon-btn" onclick="openProfileModal()"><i class="fa-solid fa-user"></i></div>
+</div>
+
+<!-- MAIN APP CONTAINER -->
+<div class="app-container">
+
+  <!-- TAB BERANDA (HOME) -->
+  <div id="tabBeranda" class="tab-content">
+    
+    <div class="hero-banner" data-aos="fade-up" data-aos-duration="600">
+      <h1 class="font-tech">XY PLUGINZ</h1>
+      <div class="badge-powered font-tech">POWERED BY @XCY</div>
+    </div>
+
+    <div class="user-card" data-aos="fade-up" data-aos-duration="600">
+      <div class="user-profile-header">
+        <div class="avatar-box">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=xcyvip" alt="Avatar">
+        </div>
+        <div class="user-info-text">
+          <span class="welcome-subtitle">Welcome Back!</span>
+          <span class="user-name-title font-tech"><span id="dispUsername">-</span> <i class="fa-solid fa-circle-check verified-icon"></i></span>
+          <span class="role-badge font-tech" id="dispRole">-</span>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-col">
+          <i class="fa-solid fa-satellite-dish"></i>
+          <span class="stat-val font-tech" id="statusOnline">ACTIVE</span>
+          <span class="stat-lbl font-tech">ONLINE</span>
+        </div>
+        <div class="stat-col">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span class="stat-val font-tech" id="statusSenderText">OFF</span>
+          <span class="stat-lbl font-tech">SENDER</span>
+        </div>
+        <div class="stat-col">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span class="stat-val font-tech" id="dispExp">-</span>
+          <span class="stat-lbl font-tech">EXPIRED</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-grid" data-aos="fade-up" data-aos-duration="600">
+      <div class="feat-card feat-orange">
+        <i class="fa-solid fa-gears"></i>
+        <span class="font-tech" style="font-weight: 800; font-size: 0.85rem;">SENDER HUB</span>
+      </div>
+      <div class="feat-card feat-red">
+        <i class="fa-solid fa-crosshairs"></i>
+        <span class="font-tech" style="font-weight: 800; font-size: 0.85rem;">CRASH VAULT</span>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-duration="600">
+      <div class="section-label font-tech">QUICK ACTION</div>
+      <div class="quick-grid">
+        <div class="quick-box" onclick="switchTab('ManageSender')">
+          <i class="fa-solid fa-user-gear"></i>
+          <span class="quick-title font-tech">Manage Sender</span>
+        </div>
+        <div class="quick-box quick-orange" onclick="switchTab('Tools')">
+          <i class="fa-solid fa-wrench"></i>
+          <span class="quick-title font-tech">Tools Gateway</span>
+        </div>
+        <div class="quick-box">
+          <i class="fa-solid fa-rocket"></i>
+          <span class="quick-title font-tech">Join Channel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="user-card" data-aos="fade-up" data-aos-duration="600">
+      <div class="quick-title font-tech">REDEEM KODE GLOBAL SENDER</div>
+      <div class="form-group" style="margin-bottom:0;">
+        <input type="text" id="inputRedeemCode" placeholder="GLOBAL-SENDER-XXXXXXX">
+      </div>
+      <button class="btn-neubrutal font-tech" onclick="submitRedeemCode()">KIRIM KODE</button>
+    </div>
+
+  </div>
+
+  <!-- TAB MANAGE SENDER -->
+  <div id="tabManageSender" class="tab-content hidden">
+    
+    <div id="noSenderView" class="no-sender-box" data-aos="fade-up">
+      <div class="phone-circle-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+      <div class="no-sender-title font-tech">NO SENDERS</div>
+      <div class="no-sender-sub">Tambahkan sender WhatsApp lu buat mulai nge-crash target!</div>
+      <button class="btn-add-sender font-tech" onclick="openAddSenderModal()">+ TAMBAH SENDER</button>
+    </div>
+
+    <div id="connectedSenderView" class="hidden" data-aos="fade-up">
+      <div class="sender-item-card">
+        <div class="sender-top-row">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:var(--green-accent); border:2px solid #000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:0.9rem;"><i class="fa-solid fa-check"></i></div>
+            <div>
+              <div class="font-tech" style="font-weight:800; font-size:1rem;" id="connectedSessionName">anjayy</div>
+              <div style="font-size:0.8rem; font-weight:700; color:var(--muted);" id="connectedPhoneNum">6287875609316</div>
+            </div>
+          </div>
+          <div class="sender-badge-connected font-tech">Connected</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button class="btn-neubrutal font-tech" style="background: var(--card-bg); color: #000;" onclick="refreshSenderStatus()"><i class="fa-solid fa-rotate-right"></i> REFRESH</button>
+          <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="deleteSender()"><i class="fa-solid fa-trash"></i> DELETE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="fab-btn font-tech" onclick="openAddSenderModal()">+</div>
+  </div>
+
+  <!-- TAB WHATSAPP -->
+  <div id="tabWhatsapp" class="tab-content hidden">
+    <div class="user-card" data-aos="fade-up">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="font-tech" style="font-weight: 800;">STATUS SENDER</span>
+        <span id="senderStatusBadge" class="role-badge font-tech" style="background: var(--red-accent);">NO SENDER</span>
+      </div>
+
+      <div class="sender-selector-grid">
+        <div class="sender-select-card font-tech active" id="btnSenderMe" onclick="selectSenderType('me')">
+          <i class="fa-solid fa-user"></i> SENDER ME
+        </div>
+        <div class="sender-select-card font-tech" id="btnSenderGlobal" onclick="selectSenderType('global')">
+          <i class="fa-solid fa-earth-americas"></i> SENDER GLOBAL
+        </div>
+      </div>
+
+      <!-- HITUNG MUNDUR WAKTU NYATA SENDER GLOBAL / KODE REDEEM -->
+      <div id="globalSenderInfoBox" style="background: #fff3cd; border: 2.5px solid var(--dark-border); padding: 10px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 800; color: #856404; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+        <span><i class="fa-solid fa-clock"></i> SISA AKTIF SENDER GLOBAL:</span>
+        <span id="dispGlobalExpVal" class="font-tech" style="color: #000; background: var(--orange-accent); padding: 3px 8px; border-radius: 6px; border: 1.5px solid #000; font-size: 0.78rem;">Memuat...</span>
+      </div>
+
+      <div style="background: #ffcccc; border: 2.5px solid var(--dark-border); padding: 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; color: #990000; margin-bottom: 12px;">
+        SELAMAT DATANG
+      </div>
+
+      <div class="form-group">
+        <label class="font-tech">NOMOR TARGET REPORT</label>
+        <input type="text" id="targetReportPhone" placeholder="6287875609316">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="font-tech">JUMLAH REPORT (MAX 1000)</label>
+        <input type="number" id="targetReportCount" value="5" min="1" max="1000">
+      </div>
+
+      <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="executeReport()">MULAI</button>
+    </div>
+
+    <div style="margin-top: 10px;" data-aos="fade-up">
+      <div class="section-label font-tech" style="margin-bottom: 6px;">TERMINAL CONSOLE</div>
+      <div class="terminal-box" id="terminalLogBox">
+        <div>$ SERVER READY</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB RESELLER -->
+  <div id="tabReseller" class="tab-content hidden">
+    <!-- FORM CREATE ACCOUNT RESELLER -->
+    <div class="user-card" data-aos="fade-up">
+      <div class="quick-title font-tech"><i class="fa-solid fa-user-plus"></i> CREATE ACCOUNT RESELLER</div>
+      <div class="form-group">
+        <label class="font-tech">USERNAME BARU</label>
+        <input type="text" id="resNewUser">
+      </div>
+      <div class="form-group">
+        <label class="font-tech">PASSWORD BARU</label>
+        <input type="password" id="resNewPass">
+      </div>
+      <div class="form-group">
+        <label class="font-tech">ROLE</label>
+        <select id="resNewRole">
+          <option value="member">Member</option>
+          <option value="reseller">Reseller</option>
+          <option value="vip">VIP</option>
+          <option value="tk">TK</option>
+          <option value="founder">Founder</option>
+          <option value="owner">Owner</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="font-tech">MASA AKTIF (HARI, MAX 30)</label>
+        <input type="number" id="resNewDays" value="30" min="1" max="30">
+      </div>
+      <button class="btn-neubrutal font-tech" onclick="handleResellerCreateAccount()">BUAT AKUN</button>
+    </div>
+
+    <!-- FORM DELETE ACCOUNT RESELLER -->
+    <div class="user-card" data-aos="fade-up" style="margin-top: 12px;">
+      <div class="quick-title font-tech" style="color: var(--red-accent);"><i class="fa-solid fa-user-xmark"></i> DELETE ACCOUNT RESELLER</div>
+      <div class="form-group">
+        <label class="font-tech">USERNAME AKUN YANG INGIN DIHAPUS</label>
+        <input type="text" id="delAccountUser" placeholder="Masukkan username">
+      </div>
+      <div class="form-group">
+        <label class="font-tech">PASSWORD AKUN YANG INGIN DIHAPUS</label>
+        <input type="password" id="delAccountPass" placeholder="Masukkan password">
+      </div>
+      <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="handleResellerDeleteAccount()">HAPUS AKUN</button>
+    </div>
+  </div>
+
+  <!-- TAB TOOLS -->
+  <div id="tabTools" class="tab-content hidden">
+    <div class="user-card" style="text-align: center; padding: 40px 20px;" data-aos="fade-up">
+      <div class="font-tech" style="font-weight: 800;">Fitur Belum Tersedia</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAVBAR -->
+<div class="bottom-navbar">
+  <div class="nav-tab active" onclick="switchTab('Beranda', this)">
+    <i class="fa-solid fa-house"></i>
+    <span class="font-tech">HOME</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('Whatsapp', this)">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="font-tech">WHATSAPP</span>
+  </div>
+  <div class="nav-tab hidden" id="navResellerItem" onclick="switchTab('Reseller', this)">
+    <i class="fa-solid fa-user-plus"></i>
+    <span class="font-tech">RESELLER</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('Tools', this)">
+    <i class="fa-solid fa-toolbox"></i>
+    <span class="font-tech">TOOLS</span>
+  </div>
+</div>
+
+<!-- MODAL UBAH PASSWORD -->
+<div id="changePasswordModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span class="font-tech" style="font-weight: 800; font-size: 1.1rem;">UBAH PASSWORD</span>
+      <button style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closeChangePasswordModal()">X</button>
+    </div>
+
+    <div class="form-group">
+      <label class="font-tech">PASSWORD LAMA</label>
+      <input type="password" id="oldPassInput">
+    </div>
+
+    <div class="form-group">
+      <label class="font-tech">PASSWORD BARU</label>
+      <input type="password" id="newPassInput">
+    </div>
+
+    <button class="btn-neubrutal font-tech" onclick="submitChangePassword()">SIMPAN PASSWORD</button>
+  </div>
+</div>
+
+<!-- MODAL ADD SENDER -->
+<div id="addSenderModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="font-tech" style="font-weight: 800; font-size: 1.1rem;">ADD SENDER</span>
+    </div>
+
+    <div class="input-yellow-icon font-tech">
+      <i class="fa-solid fa-phone"></i>
+      <input type="text" id="addPhoneInput" placeholder="Phone Number (62xxx)">
+    </div>
+
+    <div class="input-yellow-icon font-tech">
+      <i class="fa-solid fa-id-card"></i>
+      <input type="text" id="addSessionNameInput" placeholder="Session Name">
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+      <button class="font-tech" style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closeAddSenderModal()">BATAL</button>
+      <button class="btn-neubrutal font-tech" id="btnGetPairing" style="width:auto; padding:8px 20px; background:var(--orange-accent); color:#000;" onclick="submitAddSender()">GET PAIRING</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAIRING REQUIRED -->
+<div id="pairingModal" class="modal-backdrop hidden">
+  <div class="modal-card" style="text-align: center;">
+    <div style="width:50px; height:50px; border-radius:50%; background:var(--orange-accent); border:2.5px solid #000; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+      <i class="fa-solid fa-qrcode"></i>
+    </div>
+    
+    <div class="font-tech" style="font-size: 1.2rem; font-weight: 800;">PAIRING REQUIRED</div>
+    
+    <div style="font-size: 0.85rem; font-weight: 700;">
+      <div>Name: <b id="pairDispName">-</b></div>
+      <div>Number: <b id="pairDispNum">-</b></div>
+    </div>
+
+    <div class="code-box-black font-tech" id="pairCodeDisplay">-</div>
+
+    <div style="font-size: 0.72rem; font-weight: 700; color: var(--muted); line-height: 1.4;">
+      Buka WhatsApp → Settings → Linked Devices → Link a Device<br>
+      Masukkan kode di atas untuk pairing
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px;">
+      <button class="font-tech" style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closePairingModal()">TUTUP</button>
+      <button class="btn-neubrutal font-tech" style="width:auto; padding:8px 16px; background:var(--yellow-bg); color:#000;" onclick="submitAddSender()">REFRESH</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROFILE & LOGOUT -->
+<div id="profileModal" class="modal-backdrop hidden">
+  <div class="modal-card" style="text-align: center;">
+    <div style="width:60px; height:60px; border-radius:50%; background:#ffb3b3; border:2.5px solid #000; margin:0 auto; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <img src="https://api.dicebear.com/7.x/bottts/svg?seed=xcyvip" style="width:100%; height:100%;">
+    </div>
+    
+    <div>
+      <div class="font-tech" style="font-size:1.3rem; font-weight:800;" id="profUsername">-</div>
+      <div class="role-badge font-tech" style="margin: 4px auto;" id="profRole">-</div>
+    </div>
+
+    <div style="background:var(--card-bg); border:2px solid #000; padding:10px; border-radius:10px; font-size:0.8rem; font-weight:700;">
+      Masa Aktif: <span id="profExp">-</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+      <button class="btn-neubrutal font-tech" style="background:var(--red-accent);" onclick="handleLogout()">LOGOUT</button>
+      <button class="font-tech" style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closeProfileModal()">TUTUP</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONSOLE KODE RENDEM -->
+<div id="globalModal" class="modal-backdrop hidden">
+  <div class="auth-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span class="font-tech" style="font-weight: 800;">CONSOLE KODE RENDEM</span>
+      <button style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closeGlobalModal()">X</button>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="font-tech">JUMLAH KODE</label>
+        <select id="globalCountSelect">
+          <option value="1" selected>1 Kode</option>
+          <option value="2">2 Kode</option>
+          <option value="3">3 Kode</option>
+          <option value="4">4 Kode</option>
+          <option value="5">5 Kode</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="font-tech">MASA AKTIF</label>
+        <select id="globalDaysSelect">
+          <option value="1">1 Hari</option>
+          <option value="3">3 Hari</option>
+          <option value="7" selected>7 Hari</option>
+          <option value="14">14 Hari</option>
+          <option value="30">30 Hari</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- STATUS LIMIT -->
+    <div id="limitStatusText" class="font-tech" style="font-size: 0.78rem; font-weight: 800; color: #333; margin-bottom: 10px; text-align: center; background: var(--card-bg); padding: 6px; border: 2px solid #000; border-radius: 8px;">
+      SISA LIMIT: <span id="limitCountVal" style="color: #000;">5/5</span>
+    </div>
+
+    <button class="btn-neubrutal font-tech" onclick="generateGlobalCode()">CREATE KODE RENDEM</button>
+    
+    <div id="genResultBox" class="hidden" style="margin-top: 12px; background: #fff; padding: 10px; border: 2px solid #000; border-radius: 8px; text-align: center; max-height: 150px; overflow-y: auto;">
+      <div id="genResultVal" class="font-tech" style="font-weight: 800; word-break: break-all; font-size: 0.8rem; text-align: left;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT JS ANIMASI SCROLL (AOS) -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({ duration: 600, once: false, easing: 'ease-out-cubic' });
+
+  const SUPABASE_URL = "https://mqvpjvgulfotlbtjgojw.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_QG5aNX5L9w-HINgOow-5Ug_rcNxm8TW";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const MANUAL_BACKEND_URL = "https://summaries-quote-clicks-doug.trycloudflare.com"; 
+  let getBackendUrl = () => MANUAL_BACKEND_URL || window.location.origin;
+
+  let currentUser = null;
+  let activeLocalSender = null;
+  let activeSessionName = "";
+  let hasGlobalAccess = false;
+  let selectedSenderType = 'me';
+  let ws = null;
+  let isServerConnected = false;
+  let countdownInterval = null;
+  let toastTimeout = null;
+
+  /* FUNGSI TOAST NOTIFIKASI ANTI SPAM */
+  function showToast(message, isError = false) {
+    const container = document.getElementById('customToastContainer');
+    
+    container.innerHTML = "";
+    if (toastTimeout) clearTimeout(toastTimeout);
+
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast font-tech';
+    
+    if (isError) {
+      toast.style.background = '#ff4d4d';
+      toast.style.color = '#ffffff';
+      toast.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>${message}</span>`;
+    } else {
+      toast.style.background = '#ffffff';
+      toast.style.color = '#000000';
+      toast.innerHTML = `<i class="fa-solid fa-circle-info" style="color:var(--orange-accent);"></i> <span>${message}</span>`;
+    }
+
+    container.appendChild(toast);
+
+    toastTimeout = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.2s ease';
+      setTimeout(() => toast.remove(), 200);
+    }, 2500);
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const savedUser = localStorage.getItem('xy_user_session');
+    if (savedUser) {
+      currentUser = JSON.parse(savedUser);
+      document.getElementById('authOverlay').classList.add('hidden');
+      setupUserUI();
+      
+      await loadGlobalSenderData();
+
+      initWebSocket();
+      checkActiveSendersOnLoad();
+    }
+  });
+
+  async function loadGlobalSenderData() {
+    if (!currentUser) return;
+    
+    const expKey = 'xy_global_exp_' + currentUser.username;
+    let savedExp = localStorage.getItem(expKey);
+
+    if (!savedExp) {
+      const { data } = await supabaseClient
+        .from('redeem_codes')
+        .select('expires_at')
+        .eq('used_by', currentUser.username)
+        .order('expires_at', { ascending: false })
+        .limit(1);
+
+      if (data && data.length > 0) {
+        savedExp = data[0].expires_at;
+        localStorage.setItem(expKey, savedExp);
+      }
+    }
+
+    startGlobalCountdown(savedExp);
+  }
+
+  function startGlobalCountdown(expiryISO) {
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    const updateTimer = () => {
+      const dispVal = document.getElementById('dispGlobalExpVal');
+      if (!dispVal) return;
+
+      if (!expiryISO) {
+        if (localStorage.getItem('xy_global_access_' + currentUser.username) === 'true') {
+          hasGlobalAccess = true;
+          dispVal.innerText = "Aktif (Tanpa Batas)";
+          dispVal.style.background = "var(--green-accent)";
+          dispVal.style.color = "#fff";
+        } else {
+          hasGlobalAccess = false;
+          dispVal.innerText = "Belum Aktif";
+          dispVal.style.background = "var(--orange-accent)";
+          dispVal.style.color = "#000";
+        }
+        return;
+      }
+
+      const targetTime = new Date(expiryISO).getTime();
+      const now = new Date().getTime();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        hasGlobalAccess = false;
+        localStorage.removeItem('xy_global_access_' + currentUser.username);
+        localStorage.removeItem('xy_global_exp_' + currentUser.username);
+        dispVal.innerText = "Kadaluwarsa";
+        dispVal.style.background = "var(--red-accent)";
+        dispVal.style.color = "#fff";
+        clearInterval(countdownInterval);
+      } else {
+        hasGlobalAccess = true;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        let timeStr = "";
+        if (days > 0) timeStr += `${days}d `;
+        timeStr += `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        dispVal.innerText = timeStr;
+        dispVal.style.background = "var(--green-accent)";
+        dispVal.style.color = "#fff";
+      }
+    };
+
+    updateTimer();
+    countdownInterval = setInterval(updateTimer, 1000);
+  }
+
+  function openDrawer() {
+    document.getElementById('sideDrawer').classList.add('active');
+    document.getElementById('drawerOverlay').classList.add('active');
+  }
+
+  function closeDrawer() {
+    document.getElementById('sideDrawer').classList.remove('active');
+    document.getElementById('drawerOverlay').classList.remove('active');
+  }
+
+  function openChangePasswordModal() {
+    document.getElementById('oldPassInput').value = "";
+    document.getElementById('newPassInput').value = "";
+    document.getElementById('changePasswordModal').classList.remove('hidden');
+  }
+
+  function closeChangePasswordModal() {
+    document.getElementById('changePasswordModal').classList.add('hidden');
+  }
+
+  async function submitChangePassword() {
+    const oldP = document.getElementById('oldPassInput').value.trim();
+    const newP = document.getElementById('newPassInput').value.trim();
+
+    if (!oldP || !newP) return showToast("Lengkapi data password!", true);
+    if (oldP !== currentUser.password) return showToast("Password lama Anda salah!", true);
+
+    const { error } = await supabaseClient
+      .from('users')
+      .update({ password: newP })
+      .eq('id', currentUser.id);
+
+    if (error) {
+      showToast("Gagal memperbarui password: " + error.message, true);
+    } else {
+      currentUser.password = newP;
+      localStorage.setItem('xy_user_session', JSON.stringify(currentUser));
+      showToast("Password berhasil diubah!");
+      closeChangePasswordModal();
+    }
+  }
+
+  async function handleLogin() {
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value.trim();
+
+    if (!u || !p) return showToast("Isi username dan password!", true);
+
+    const { data, error } = await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('username', u)
+      .eq('password', p)
+      .single();
+
+    if (error || !data) return showToast("Username atau Password salah!", true);
+    if (new Date(data.expires_at) < new Date()) return showToast("Masa aktif akun Anda telah habis!", true);
+
+    currentUser = data;
+    localStorage.setItem('xy_user_session', JSON.stringify(data));
+    
+    await loadGlobalSenderData();
+
+    document.getElementById('authOverlay').classList.add('hidden');
+    setupUserUI();
+    initWebSocket();
+    checkActiveSendersOnLoad();
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('xy_user_session');
+    localStorage.removeItem('xy_active_sender');
+    location.reload();
+  }
+
+  function openProfileModal() {
+    if (!currentUser) return;
+    document.getElementById('profUsername').innerText = currentUser.username;
+    document.getElementById('profRole').innerText = currentUser.role.toUpperCase();
+    document.getElementById('profExp').innerText = new Date(currentUser.expires_at).toISOString().split('T')[0];
+    document.getElementById('profileModal').classList.remove('hidden');
+  }
+  function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
+
+  async function checkActiveSendersOnLoad() {
+    try {
+      const savedSender = localStorage.getItem('xy_active_sender');
+      if (savedSender) {
+        const parsed = JSON.parse(savedSender);
+        activeLocalSender = parsed.phone;
+        activeSessionName = parsed.sessionName;
+      }
+
+      const res = await fetch(`${getBackendUrl()}/api/active-senders`);
+      const data = await res.json();
+
+      if (data.senders && data.senders.length > 0) {
+        const active = data.senders[0];
+        activeLocalSender = active.phone;
+        activeSessionName = active.sessionName;
+        localStorage.setItem('xy_active_sender', JSON.stringify({ phone: activeLocalSender, sessionName: activeSessionName }));
+      }
+      updateSenderBadge();
+    } catch (e) {}
+  }
+
+  function setupUserUI() {
+    document.getElementById('dispUsername').innerText = currentUser.username;
+    document.getElementById('dispRole').innerText = currentUser.role.toUpperCase();
+    document.getElementById('dispExp').innerText = new Date(currentUser.expires_at).toISOString().split('T')[0];
+    
+    document.getElementById('drawerUsername').innerText = currentUser.username;
+    document.getElementById('drawerRole').innerText = currentUser.role.toUpperCase();
+
+    const allowedRoles = ['reseller', 'founder', 'tk', 'vip', 'owner', 'owner2', 'owner3'];
+    const userRole = currentUser.role.toLowerCase();
+
+    if (allowedRoles.includes(userRole)) {
+      document.getElementById('navResellerItem').classList.remove('hidden');
+      document.getElementById('drawerConsoleBtn').classList.remove('hidden');
+    } else {
+      document.getElementById('navResellerItem').classList.add('hidden');
+      document.getElementById('drawerConsoleBtn').classList.add('hidden');
+    }
+  }
+
+  function selectSenderType(type) {
+    if (type === 'global' && !hasGlobalAccess) {
+      showToast("anda tidak dapat sender global rendem sekarang di beranda", true);
+      return;
+    }
+
+    selectedSenderType = type;
+    const btnMe = document.getElementById('btnSenderMe');
+    const btnGlobal = document.getElementById('btnSenderGlobal');
+
+    if (type === 'me') {
+      btnMe.classList.add('active');
+      btnGlobal.classList.remove('active');
+    } else {
+      btnGlobal.classList.add('active');
+      btnMe.classList.remove('active');
+    }
+    updateSenderBadge();
+  }
+
+  function switchTab(tabName, el) {
+    document.querySelectorAll('.tab-content').forEach(e => e.classList.add('hidden'));
+    document.querySelectorAll('.nav-tab').forEach(e => e.classList.remove('active'));
+
+    document.getElementById('tab' + tabName).classList.remove('hidden');
+    if (el) el.classList.add('active');
+
+    if (tabName === 'ManageSender') {
+      document.getElementById('headerTitle').innerText = "MANAGE SENDER";
+    } else {
+      document.getElementById('headerTitle').innerText = "XY PLUGINZ";
+    }
+    
+    setTimeout(() => { AOS.refresh(); }, 100);
+  }
+
+  function openAddSenderModal() { 
+    document.getElementById('addSenderModal').classList.remove('hidden'); 
+    resetPairingBtn();
+  }
+  function closeAddSenderModal() { 
+    document.getElementById('addSenderModal').classList.add('hidden'); 
+    resetPairingBtn();
+  }
+  
+  function openPairingModal(code, name, num) {
+    document.getElementById('pairCodeDisplay').innerText = code;
+    document.getElementById('pairDispName').innerText = name;
+    document.getElementById('pairDispNum').innerText = num;
+    document.getElementById('pairingModal').classList.remove('hidden');
+    resetPairingBtn();
+  }
+  function closePairingModal() { document.getElementById('pairingModal').classList.add('hidden'); }
+
+  function resetPairingBtn() {
+    const btn = document.getElementById('btnGetPairing');
+    btn.disabled = false;
+    btn.innerHTML = "GET PAIRING";
+  }
+
+  function appendTerminalLog(msg) {
+    const box = document.getElementById('terminalLogBox');
+    const newDiv = document.createElement('div');
+    newDiv.innerText = msg;
+    box.appendChild(newDiv);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function submitAddSender() {
+    if (!isServerConnected) {
+      showToast("SERVER SEDANG OFFLINE", true);
+      return;
+    }
+
+    const phone = document.getElementById('addPhoneInput').value.trim();
+    const sessionName = document.getElementById('addSessionNameInput').value.trim() || "My Sender";
+
+    if (!phone) return showToast("Masukkan Nomor WA!", true);
+
+    activeLocalSender = phone;
+    activeSessionName = sessionName;
+    localStorage.setItem('xy_active_sender', JSON.stringify({ phone, sessionName }));
+
+    const btn = document.getElementById('btnGetPairing');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> LOADING...`;
+
+    try {
+      const res = await fetch(`${getBackendUrl()}/api/connect`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, sessionName })
+      });
+
+      const data = await res.json();
+      if (data.success && ws) {
+        ws.send(JSON.stringify({ type: "init_user", phone }));
+      }
+    } catch (e) {
+      showToast("SERVER SEDANG OFFLINE", true);
+      resetPairingBtn();
+    }
+  }
+
+  async function deleteSender() {
+    if (!activeLocalSender) return;
+
+    await fetch(`${getBackendUrl()}/api/delete-sender`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: activeLocalSender })
+    });
+
+    activeLocalSender = null;
+    activeSessionName = "";
+    localStorage.removeItem('xy_active_sender');
+    updateSenderBadge();
+    showToast("Sender berhasil dihapus!");
+  }
+
+  async function refreshSenderStatus() {
+    if (!activeLocalSender) return;
+    try {
+      const res = await fetch(`${getBackendUrl()}/api/status?phone=${activeLocalSender}`);
+      const data = await res.json();
+      if (data.connected) {
+        updateSenderBadge();
+        showToast("Status Sender Terhubung!");
+      } else {
+        showToast("Sender tidak terhubung.", true);
+      }
+    } catch(e) {
+      showToast("SERVER SEDANG OFFLINE", true);
+    }
+  }
+
+  function updateSenderBadge() {
+    const badge = document.getElementById('senderStatusBadge');
+    const noSenderView = document.getElementById('noSenderView');
+    const connectedSenderView = document.getElementById('connectedSenderView');
+
+    if (selectedSenderType === 'global' && hasGlobalAccess) {
+      badge.style.background = "var(--orange-accent)";
+      badge.innerText = "GLOBAL SENDER";
+    } else if (activeLocalSender) {
+      badge.style.background = "var(--green-accent)";
+      badge.innerText = "SENDER 1";
+
+      noSenderView.classList.add('hidden');
+      connectedSenderView.classList.remove('hidden');
+      document.getElementById('connectedSessionName').innerText = activeSessionName;
+      document.getElementById('connectedPhoneNum').innerText = activeLocalSender;
+      document.getElementById('statusSenderText').innerText = "Active";
+    } else {
+      badge.style.background = "var(--red-accent)";
+      badge.innerText = "NO SENDER";
+
+      noSenderView.classList.remove('hidden');
+      connectedSenderView.classList.add('hidden');
+      document.getElementById('statusSenderText').innerText = "Off";
+    }
+  }
+
+  function updateLimitDisplay() {
+    if (!currentUser) return;
+    const countKey = 'xy_gen_count_' + currentUser.username;
+    let currentGenCount = parseInt(localStorage.getItem(countKey)) || 0;
+    const sisa = 5 - currentGenCount;
+    document.getElementById('limitCountVal').innerText = `${sisa <= 0 ? 0 : sisa}/5`;
+  }
+
+  function openGlobalModal() { 
+    updateLimitDisplay();
+    document.getElementById('globalModal').classList.remove('hidden'); 
+  }
+
+  function closeGlobalModal() { 
+    document.getElementById('globalModal').classList.add('hidden'); 
+  }
+
+  async function generateGlobalCode() {
+    const qty = parseInt(document.getElementById('globalCountSelect').value) || 1;
+    const days = parseInt(document.getElementById('globalDaysSelect').value) || 1;
+
+    const countKey = 'xy_gen_count_' + currentUser.username;
+    let currentGenCount = parseInt(localStorage.getItem(countKey)) || 0;
+
+    if (currentGenCount + qty > 5) {
+      const sisa = 5 - currentGenCount;
+      return showToast(`Batas maksimal total generate adalah 5 kode! Anda hanya bisa membuat ${sisa <= 0 ? 0 : sisa} kode lagi.`, true);
+    }
+
+    const insertedCodes = [];
+
+    for (let i = 0; i < qty; i++) {
+      const randStr = Math.random().toString(36).substring(2, 9).toUpperCase();
+      const code = "GLOBAL-SENDER-" + randStr;
+      const exp = new Date();
+      exp.setDate(exp.getDate() + days);
+
+      const { error } = await supabaseClient
+        .from('redeem_codes')
+        .insert([{ code, expires_at: exp.toISOString(), created_by: currentUser.username, is_used: false }]);
+
+      if (!error) {
+        insertedCodes.push(code);
+      }
+    }
+
+    if (insertedCodes.length === 0) {
+      showToast("Gagal membuat kode redeem!", true);
+    } else {
+      currentGenCount += insertedCodes.length;
+      localStorage.setItem(countKey, currentGenCount);
+      updateLimitDisplay();
+
+      const resultBox = document.getElementById('genResultBox');
+      const resultVal = document.getElementById('genResultVal');
+      resultBox.classList.remove('hidden');
+
+      let listHtml = `<div style="margin-bottom:6px; font-weight:800; color:green;">BERHASIL BUAT ${insertedCodes.length} KODE (${days} HARI):</div>`;
+      insertedCodes.forEach((c, idx) => {
+        listHtml += `<div style="padding: 2px 0;">${idx + 1}. ${c}</div>`;
+      });
+
+      resultVal.innerHTML = listHtml;
+    }
+  }
+
+  async function submitRedeemCode() {
+    const code = document.getElementById('inputRedeemCode').value.trim();
+    if (!code) return showToast("Masukkan kode redeem!", true);
+
+    const { data, error } = await supabaseClient
+      .from('redeem_codes')
+      .select('*')
+      .eq('code', code)
+      .single();
+
+    if (error || !data) {
+      return showToast("Kode redeem tidak ditemukan!", true);
+    }
+
+    if (data.is_used) {
+      return showToast("Kode redeem ini sudah pernah digunakan!", true);
+    }
+
+    if (new Date(data.expires_at) < new Date()) {
+      return showToast("Kode redeem ini sudah kedaluwarsa!", true);
+    }
+
+    await supabaseClient.from('redeem_codes').update({ is_used: true, used_by: currentUser.username }).eq('id', data.id);
+    
+    hasGlobalAccess = true;
+    localStorage.setItem('xy_global_access_' + currentUser.username, 'true');
+    localStorage.setItem('xy_global_exp_' + currentUser.username, data.expires_at);
+
+    startGlobalCountdown(data.expires_at);
+    selectSenderType('global');
+    showToast("Berhasil mengaktifkan Global Sender!");
+  }
+
+  async function executeReport() {
+    if (!isServerConnected) return showToast("SERVER SEDANG OFFLINE", true);
+
+    if (selectedSenderType === 'global' && !hasGlobalAccess) {
+      showToast("anda tidak dapat sender global rendem sekarang di beranda", true);
+      return;
+    }
+
+    const target = document.getElementById('targetReportPhone').value.trim();
+    let count = parseInt(document.getElementById('targetReportCount').value) || 1;
+
+    if (!target) return showToast("Masukkan nomor target!", true);
+
+    if (count > 1000) {
+      showToast("Batas maksimal report adalah 1000!", true);
+      count = 1000;
+      document.getElementById('targetReportCount').value = 1000;
+    }
+
+    const res = await fetch(`${getBackendUrl()}/api/send-report`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        targetPhone: target,
+        senderPhone: activeLocalSender,
+        isGlobal: (selectedSenderType === 'global'),
+        count: count
+      })
+    });
+    const data = await res.json();
+    if (data.error) showToast(data.error, true);
+  }
+
+  async function handleResellerCreateAccount() {
+    const u = document.getElementById('resNewUser').value.trim();
+    const p = document.getElementById('resNewPass').value.trim();
+    const r = document.getElementById('resNewRole').value;
+    let d = parseInt(document.getElementById('resNewDays').value);
+
+    if (!u || !p) return showToast("Lengkapi data!", true);
+
+    if (d > 30) {
+      showToast("Masa aktif maksimal adalah 30 hari!", true);
+      d = 30;
+      document.getElementById('resNewDays').value = 30;
+    }
+
+    const exp = new Date();
+    exp.setDate(exp.getDate() + d);
+
+    const { error } = await supabaseClient
+      .from('users')
+      .insert([{ username: u, password: p, role: r, expires_at: exp.toISOString() }]);
+
+    if (error) showToast("Gagal: " + error.message, true);
+    else {
+      showToast("Akun berhasil dibuat!");
+      document.getElementById('resNewUser').value = "";
+      document.getElementById('resNewPass').value = "";
+    }
+  }
+
+  async function handleResellerDeleteAccount() {
+    const u = document.getElementById('delAccountUser').value.trim();
+    const p = document.getElementById('delAccountPass').value.trim();
+
+    if (!u || !p) return showToast("Lengkapi username dan password yang ingin dihapus!", true);
+
+    const { data, error } = await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('username', u)
+      .eq('password', p)
+      .single();
+
+    if (error || !data) {
+      return showToast("Username atau password salah / akun tidak ditemukan!", true);
+    }
+
+    const { error: delError } = await supabaseClient
+      .from('users')
+      .delete()
+      .eq('id', data.id);
+
+    if (delError) {
+      showToast("Gagal menghapus akun: " + delError.message, true);
+    } else {
+      showToast(`Akun "${u}" berhasil dihapus!`);
+      document.getElementById('delAccountUser').value = "";
+      document.getElementById('delAccountPass').value = "";
+    }
+  }
+
+  function initWebSocket() {
+    const wsUrl = getBackendUrl().replace(/^http/, 'ws');
+    
+    try {
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        isServerConnected = true;
+        document.getElementById('statusOnline').innerText = "ACTIVE";
+        if (activeLocalSender) {
+          ws.send(JSON.stringify({ type: "init_user", phone: activeLocalSender }));
+        }
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'pairing_code') {
+          closeAddSenderModal();
+          openPairingModal(data.code, data.sessionName, data.phone);
+        } else if (data.type === 'status' && data.connected) {
+          closePairingModal();
+          updateSenderBadge();
+        } else if (data.type === 'terminal_log') {
+          appendTerminalLog(data.log);
+        }
+      };
+
+      ws.onerror = () => {
+        isServerConnected = false;
+        document.getElementById('statusOnline').innerText = "OFF";
+      };
+
+      ws.onclose = () => {
+        isServerConnected = false;
+        document.getElementById('statusOnline').innerText = "OFF";
+        setTimeout(initWebSocket, 4000);
+      };
+    } catch(e) {
+      isServerConnected = false;
+      document.getElementById('statusOnline').innerText = "OFF";
+    }
+  }
+</script>
+
+</body>
+</html>
