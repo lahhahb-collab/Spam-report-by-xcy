@@ -767,6 +767,24 @@
 
 <div id="customToastContainer"></div>
 
+<!-- MODAL UPDATE APLIKASI (OTOMATIS MUNCUL JIKA DIPICU DARI UPDATE.HTML) -->
+<div id="appUpdateModal" class="modal-backdrop hidden" style="z-index: 999999;">
+  <div class="modal-card" style="text-align: center;">
+    <div style="width:60px; height:60px; border-radius:50%; background:var(--orange-accent); border:3px solid #000; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">
+      <i class="fa-solid fa-cloud-arrow-down"></i>
+    </div>
+    
+    <div>
+      <div class="font-tech" style="font-size: 1.3rem; font-weight: 800;" id="appUpdateModalTitle">UPDATE TERSEDIA</div>
+      <p style="font-size: 0.85rem; font-weight: 700; color: var(--muted); margin-top: 6px;" id="appUpdateModalChangelog">Silakan unduh pembaruan aplikasi versi terbaru.</p>
+    </div>
+
+    <a id="appUpdateDownloadBtn" href="#" target="_blank" class="btn-neubrutal font-tech" style="background: var(--green-accent); text-decoration: none; text-align: center; padding: 14px; display: block;">
+      <i class="fa-solid fa-download"></i> UNDUH UPDATE
+    </a>
+  </div>
+</div>
+
 <!-- AUTH OVERLAY -->
 <div id="authOverlay">
   <div class="auth-box">
@@ -956,7 +974,7 @@
 
       <div class="form-group">
         <label class="font-tech">NOMOR TARGET REPORT</label>
-        <input type="text" id="targetReportPhone" placeholder="6287875609316">
+        <input type="text" id="targetReportPhone" placeholder="+628/628/08">
       </div>
 
       <!-- PILIH BUG SLIDER HORIZONTAL -->
@@ -1259,9 +1277,15 @@
 <script>
   AOS.init({ duration: 600, once: false, easing: 'ease-out-cubic' });
 
-  const SUPABASE_URL = "https://mqvpjvgulfotlbtjgojw.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_QG5aNX5L9w-HINgOow-5Ug_rcNxm8TW";
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // SUPABASE CONFIG (SISTEM USER & UPDATE)
+  const SUPABASE_URL_USER = "https://mqvpjvgulfotlbtjgojw.supabase.co";
+  const SUPABASE_KEY_USER = "sb_publishable_QG5aNX5L9w-HINgOow-5Ug_rcNxm8TW";
+  const supabaseClient = supabase.createClient(SUPABASE_URL_USER, SUPABASE_KEY_USER);
+
+  // SUPABASE KHUSUS FITUR UPDATE
+  const SUPABASE_URL_UPDATE = "https://czearfmiqddnqtailckb.supabase.co";
+  const SUPABASE_KEY_UPDATE = "sb_publishable_cB9eiLcaI4vtGK6E7NaxRQ_w3lIRTbb";
+  const updateSupabase = supabase.createClient(SUPABASE_URL_UPDATE, SUPABASE_KEY_UPDATE);
 
   const MANUAL_BACKEND_URL = "https://positions-terrain-fortune-foundation.trycloudflare.com"; 
   let getBackendUrl = () => MANUAL_BACKEND_URL || window.location.origin;
@@ -1277,7 +1301,38 @@
   let countdownInterval = null;
   let toastTimeout = null;
 
-  // TAMPILKAN INPUT JUMLAH & TERMINAL HANYA JIKA 'REPORT TARGET' DIPILIH
+  // FITUR CEK UPDATE TERBARU SECARA REALTIME DARI UPDATE.HTML
+  async function checkSystemUpdate() {
+    try {
+      const { data } = await updateSupabase
+        .from('app_updates')
+        .select('*')
+        .eq('id', 1)
+        .single();
+
+      const modal = document.getElementById('appUpdateModal');
+      if (data && data.is_active) {
+        document.getElementById('appUpdateModalTitle').innerText = data.version_title || "UPDATE TERSEDIA";
+        document.getElementById('appUpdateModalChangelog').innerText = data.changelog || "Silakan unduh pembaruan aplikasi versi terbaru.";
+        document.getElementById('appUpdateDownloadBtn').href = data.download_url || "#";
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    } catch(e) {}
+  }
+
+  // Buka Realtime Listener ke Supabase untuk Update
+  function initUpdateRealtime() {
+    checkSystemUpdate();
+    updateSupabase
+      .channel('public:app_updates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'app_updates' }, payload => {
+        checkSystemUpdate();
+      })
+      .subscribe();
+  }
+
   function selectBugOption(bugVal, element) {
     selectedBugType = bugVal;
     document.querySelectorAll('.bug-card-item').forEach(card => card.classList.remove('active'));
@@ -1295,7 +1350,6 @@
     }
   }
 
-  // NOTIFIKASI DENGAN DURASI 4 DETIK (3-5 DETIK)
   function showToast(message, isError = false) {
     const container = document.getElementById('customToastContainer');
     
@@ -1321,10 +1375,12 @@
       toast.style.opacity = '0';
       toast.style.transition = 'opacity 0.3s ease';
       setTimeout(() => toast.remove(), 300);
-    }, 4000); // 4000ms = 4 Detik
+    }, 4000);
   }
 
   window.addEventListener('DOMContentLoaded', async () => {
+    initUpdateRealtime();
+
     const savedUser = localStorage.getItem('xy_user_session');
     if (savedUser) {
       currentUser = JSON.parse(savedUser);
@@ -1818,7 +1874,6 @@
     showToast("Berhasil mengaktifkan Global Sender!");
   }
 
-  // FUNGSI EKSEKUSI DENGAN INDIKATOR LOADING & NOTIFIKASI ATAS LAYAR
   async function executeReport() {
     if (!isServerConnected) return showToast("SERVER SEDANG OFFLINE", true);
 
