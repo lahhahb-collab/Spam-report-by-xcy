@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>XY PLUGINZ - XCY SYSTEM</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- FONTAWESOME IKON VECTOR -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- LIBRARY ANIMASI SCROLL (AOS) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
@@ -66,7 +63,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* CUSTOM NOTIFICATION TOAST POPUP (ANTI SPAM) */
+    /* TOAST NOTIFIKASI SEMENTARA DI ATAS LAYAR (3 - 5 DETIK) */
     #customToastContainer {
       position: fixed;
       top: 20px;
@@ -91,11 +88,11 @@
       align-items: center;
       gap: 10px;
       pointer-events: auto;
-      animation: toastIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: toastIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     @keyframes toastIn {
-      from { transform: translateY(-20px); opacity: 0; }
+      from { transform: translateY(-30px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
@@ -448,6 +445,99 @@
       color: #000;
     }
 
+    /* PILIH BUG SLIDER HORIZONTAL */
+    .bug-scroll-container {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .bug-scroll-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .bug-scroll-container::-webkit-scrollbar-thumb {
+      background: var(--dark-border);
+      border-radius: 10px;
+    }
+
+    .bug-card-item {
+      flex: 0 0 210px;
+      scroll-snap-align: start;
+      background: #ffffff;
+      border: 3px solid var(--dark-border);
+      box-shadow: 4px 4px 0px var(--dark-border);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 110px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .bug-card-item.active {
+      background: #00e6a8;
+      box-shadow: 4px 4px 0px var(--dark-border);
+    }
+
+    .bug-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bug-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.08);
+      border: 2px solid var(--dark-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .bug-check-mark {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .bug-card-item.active .bug-check-mark {
+      display: flex;
+    }
+
+    .bug-card-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-top: 8px;
+    }
+
+    .bug-card-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      background: rgba(0,0,0,0.1);
+      border: 1.5px solid var(--dark-border);
+      padding: 2px 8px;
+      border-radius: 6px;
+      width: fit-content;
+      margin-top: 6px;
+    }
+
     /* FORM STYLES */
     .form-group { margin-bottom: 10px; }
     label { display: block; font-size: 0.72rem; font-weight: 800; margin-bottom: 4px; }
@@ -675,7 +765,6 @@
 </head>
 <body>
 
-<!-- WIDGET CONTAINER NOTIFIKASI CUSTOM (TOAST ANTI SPAM) -->
 <div id="customToastContainer"></div>
 
 <!-- AUTH OVERLAY -->
@@ -835,7 +924,7 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
           <button class="btn-neubrutal font-tech" style="background: var(--card-bg); color: #000;" onclick="refreshSenderStatus()"><i class="fa-solid fa-rotate-right"></i> REFRESH</button>
-          <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="deleteSender()"><i class="fa-solid fa-trash"></i> DELETE</button>
+          <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="logoutSender()"><i class="fa-solid fa-right-from-bracket"></i> LOG OUT</button>
         </div>
       </div>
     </div>
@@ -860,14 +949,9 @@
         </div>
       </div>
 
-      <!-- HITUNG MUNDUR WAKTU NYATA SENDER GLOBAL / KODE REDEEM -->
       <div id="globalSenderInfoBox" style="background: #fff3cd; border: 2.5px solid var(--dark-border); padding: 10px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 800; color: #856404; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
         <span><i class="fa-solid fa-clock"></i> SISA AKTIF SENDER GLOBAL:</span>
         <span id="dispGlobalExpVal" class="font-tech" style="color: #000; background: var(--orange-accent); padding: 3px 8px; border-radius: 6px; border: 1.5px solid #000; font-size: 0.78rem;">Memuat...</span>
-      </div>
-
-      <div style="background: #ffcccc; border: 2.5px solid var(--dark-border); padding: 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; color: #990000; margin-bottom: 12px;">
-        SELAMAT DATANG
       </div>
 
       <div class="form-group">
@@ -875,15 +959,80 @@
         <input type="text" id="targetReportPhone" placeholder="6287875609316">
       </div>
 
-      <div class="form-group" style="margin-bottom:12px;">
-        <label class="font-tech">JUMLAH REPORT (MAX 1000)</label>
+      <!-- PILIH BUG SLIDER HORIZONTAL -->
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label class="font-tech"><i class="fa-solid fa-bug"></i> PILIH BUG</label>
+        <div class="bug-scroll-container">
+          
+          <div class="bug-card-item active" onclick="selectBugOption('report', this)">
+            <div class="bug-card-top">
+              <div class="bug-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="bug-check-mark"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div>
+              <div class="bug-card-title font-tech">REPORT TARGET</div>
+              <div class="bug-card-tag font-tech">report_user</div>
+            </div>
+          </div>
+
+          <div class="bug-card-item" onclick="selectBugOption('delay', this)">
+            <div class="bug-card-top">
+              <div class="bug-icon-box"><i class="fa-solid fa-clock font-tech"></i></div>
+              <div class="bug-check-mark"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div>
+              <div class="bug-card-title font-tech">DELAY AMAN NOKOS</div>
+              <div class="bug-card-tag font-tech">cspam</div>
+            </div>
+          </div>
+
+          <div class="bug-card-item" onclick="selectBugOption('force_close', this)">
+            <div class="bug-card-top">
+              <div class="bug-icon-box"><i class="fa-solid fa-ghost"></i></div>
+              <div class="bug-check-mark"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div>
+              <div class="bug-card-title font-tech">FC INVISIBLE</div>
+              <div class="bug-card-tag font-tech">cxinv</div>
+            </div>
+          </div>
+
+          <div class="bug-card-item" onclick="selectBugOption('crash', this)">
+            <div class="bug-card-top">
+              <div class="bug-icon-box"><i class="fa-solid fa-skull"></i></div>
+              <div class="bug-check-mark"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div>
+              <div class="bug-card-title font-tech">CRASH WHATSAPP</div>
+              <div class="bug-card-tag font-tech">crash_wa</div>
+            </div>
+          </div>
+
+          <div class="bug-card-item" onclick="selectBugOption('stuck_logo', this)">
+            <div class="bug-card-top">
+              <div class="bug-icon-box"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="bug-check-mark"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div>
+              <div class="bug-card-title font-tech">STUCK LOGO WA</div>
+              <div class="bug-card-tag font-tech">stuck_loc</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- JUMLAH EKSEKUSI HANYA TAMPIL JIKA PILIH REPORT TARGET -->
+      <div class="form-group" id="containerCountInput" style="margin-bottom:12px;">
+        <label class="font-tech">JUMLAH EKSEKUSI (MAX 1000)</label>
         <input type="number" id="targetReportCount" value="5" min="1" max="1000">
       </div>
 
-      <button class="btn-neubrutal font-tech" style="background: var(--red-accent);" onclick="executeReport()">MULAI</button>
+      <button class="btn-neubrutal font-tech" id="btnExecuteAttack" style="background: var(--red-accent);" onclick="executeReport()">MULAI EKSEKUSI</button>
     </div>
 
-    <div style="margin-top: 10px;" data-aos="fade-up">
+    <!-- TERMINAL CONSOLE HANYA TAMPIL JIKA PILIH REPORT TARGET -->
+    <div id="containerTerminalConsole" style="margin-top: 10px;" data-aos="fade-up">
       <div class="section-label font-tech" style="margin-bottom: 6px;">TERMINAL CONSOLE</div>
       <div class="terminal-box" id="terminalLogBox">
         <div>$ SERVER READY</div>
@@ -893,7 +1042,6 @@
 
   <!-- TAB RESELLER -->
   <div id="tabReseller" class="tab-content hidden">
-    <!-- FORM CREATE ACCOUNT RESELLER -->
     <div class="user-card" data-aos="fade-up">
       <div class="quick-title font-tech"><i class="fa-solid fa-user-plus"></i> CREATE ACCOUNT RESELLER</div>
       <div class="form-group">
@@ -922,7 +1070,6 @@
       <button class="btn-neubrutal font-tech" onclick="handleResellerCreateAccount()">BUAT AKUN</button>
     </div>
 
-    <!-- FORM DELETE ACCOUNT RESELLER -->
     <div class="user-card" data-aos="fade-up" style="margin-top: 12px;">
       <div class="quick-title font-tech" style="color: var(--red-accent);"><i class="fa-solid fa-user-xmark"></i> DELETE ACCOUNT RESELLER</div>
       <div class="form-group">
@@ -1095,7 +1242,6 @@
       </div>
     </div>
 
-    <!-- STATUS LIMIT -->
     <div id="limitStatusText" class="font-tech" style="font-size: 0.78rem; font-weight: 800; color: #333; margin-bottom: 10px; text-align: center; background: var(--card-bg); padding: 6px; border: 2px solid #000; border-radius: 8px;">
       SISA LIMIT: <span id="limitCountVal" style="color: #000;">5/5</span>
     </div>
@@ -1108,7 +1254,6 @@
   </div>
 </div>
 
-<!-- SCRIPT JS ANIMASI SCROLL (AOS) -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
 <script>
@@ -1118,7 +1263,7 @@
   const SUPABASE_KEY = "sb_publishable_QG5aNX5L9w-HINgOow-5Ug_rcNxm8TW";
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const MANUAL_BACKEND_URL = "https://talks-massive-paris-jun.trycloudflare.com"; 
+  const MANUAL_BACKEND_URL = "https://positions-terrain-fortune-foundation.trycloudflare.com/"; 
   let getBackendUrl = () => MANUAL_BACKEND_URL || window.location.origin;
 
   let currentUser = null;
@@ -1126,12 +1271,31 @@
   let activeSessionName = "";
   let hasGlobalAccess = false;
   let selectedSenderType = 'me';
+  let selectedBugType = 'report';
   let ws = null;
   let isServerConnected = false;
   let countdownInterval = null;
   let toastTimeout = null;
 
-  /* FUNGSI TOAST NOTIFIKASI ANTI SPAM */
+  // TAMPILKAN INPUT JUMLAH & TERMINAL HANYA JIKA 'REPORT TARGET' DIPILIH
+  function selectBugOption(bugVal, element) {
+    selectedBugType = bugVal;
+    document.querySelectorAll('.bug-card-item').forEach(card => card.classList.remove('active'));
+    element.classList.add('active');
+
+    const countContainer = document.getElementById('containerCountInput');
+    const terminalContainer = document.getElementById('containerTerminalConsole');
+
+    if (bugVal === 'report') {
+      countContainer.classList.remove('hidden');
+      terminalContainer.classList.remove('hidden');
+    } else {
+      countContainer.classList.add('hidden');
+      terminalContainer.classList.add('hidden');
+    }
+  }
+
+  // NOTIFIKASI DENGAN DURASI 4 DETIK (3-5 DETIK)
   function showToast(message, isError = false) {
     const container = document.getElementById('customToastContainer');
     
@@ -1146,18 +1310,18 @@
       toast.style.color = '#ffffff';
       toast.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>${message}</span>`;
     } else {
-      toast.style.background = '#ffffff';
-      toast.style.color = '#000000';
-      toast.innerHTML = `<i class="fa-solid fa-circle-info" style="color:var(--orange-accent);"></i> <span>${message}</span>`;
+      toast.style.background = '#00cc66';
+      toast.style.color = '#ffffff';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
     }
 
     container.appendChild(toast);
 
     toastTimeout = setTimeout(() => {
       toast.style.opacity = '0';
-      toast.style.transition = 'opacity 0.2s ease';
-      setTimeout(() => toast.remove(), 200);
-    }, 2500);
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000); // 4000ms = 4 Detik
   }
 
   window.addEventListener('DOMContentLoaded', async () => {
@@ -1323,7 +1487,6 @@
 
   function handleLogout() {
     localStorage.removeItem('xy_user_session');
-    localStorage.removeItem('xy_active_sender');
     location.reload();
   }
 
@@ -1337,22 +1500,26 @@
   function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
 
   async function checkActiveSendersOnLoad() {
+    if (!currentUser) return;
     try {
-      const savedSender = localStorage.getItem('xy_active_sender');
+      const savedSender = localStorage.getItem('xy_active_sender_' + currentUser.username);
       if (savedSender) {
         const parsed = JSON.parse(savedSender);
         activeLocalSender = parsed.phone;
         activeSessionName = parsed.sessionName;
       }
 
-      const res = await fetch(`${getBackendUrl()}/api/active-senders`);
+      const res = await fetch(`${getBackendUrl()}/api/active-senders?username=${currentUser.username}`);
       const data = await res.json();
 
       if (data.senders && data.senders.length > 0) {
         const active = data.senders[0];
         activeLocalSender = active.phone;
         activeSessionName = active.sessionName;
-        localStorage.setItem('xy_active_sender', JSON.stringify({ phone: activeLocalSender, sessionName: activeSessionName }));
+        localStorage.setItem('xy_active_sender_' + currentUser.username, JSON.stringify({ phone: activeLocalSender, sessionName: activeSessionName }));
+      } else {
+        activeLocalSender = null;
+        activeSessionName = "";
       }
       updateSenderBadge();
     } catch (e) {}
@@ -1459,7 +1626,7 @@
 
     activeLocalSender = phone;
     activeSessionName = sessionName;
-    localStorage.setItem('xy_active_sender', JSON.stringify({ phone, sessionName }));
+    localStorage.setItem('xy_active_sender_' + currentUser.username, JSON.stringify({ phone, sessionName }));
 
     const btn = document.getElementById('btnGetPairing');
     btn.disabled = true;
@@ -1469,7 +1636,11 @@
       const res = await fetch(`${getBackendUrl()}/api/connect`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, sessionName })
+        body: JSON.stringify({ 
+          phone, 
+          sessionName, 
+          username: currentUser.username 
+        })
       });
 
       const data = await res.json();
@@ -1482,26 +1653,33 @@
     }
   }
 
-  async function deleteSender() {
-    if (!activeLocalSender) return;
+  async function logoutSender() {
+    if (!activeLocalSender || !currentUser) return;
 
-    await fetch(`${getBackendUrl()}/api/delete-sender`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: activeLocalSender })
-    });
+    showToast("Memproses logout dari WhatsApp...");
+
+    try {
+      await fetch(`${getBackendUrl()}/api/logout-sender`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          phone: activeLocalSender, 
+          username: currentUser.username 
+        })
+      });
+    } catch (e) {}
 
     activeLocalSender = null;
     activeSessionName = "";
-    localStorage.removeItem('xy_active_sender');
+    localStorage.removeItem('xy_active_sender_' + currentUser.username);
     updateSenderBadge();
-    showToast("Sender berhasil dihapus!");
+    showToast("Berhasil Log Out dari WhatsApp!");
   }
 
   async function refreshSenderStatus() {
-    if (!activeLocalSender) return;
+    if (!activeLocalSender || !currentUser) return;
     try {
-      const res = await fetch(`${getBackendUrl()}/api/status?phone=${activeLocalSender}`);
+      const res = await fetch(`${getBackendUrl()}/api/status?phone=${activeLocalSender}&username=${currentUser.username}`);
       const data = await res.json();
       if (data.connected) {
         updateSenderBadge();
@@ -1640,6 +1818,7 @@
     showToast("Berhasil mengaktifkan Global Sender!");
   }
 
+  // FUNGSI EKSEKUSI DENGAN INDIKATOR LOADING & NOTIFIKASI ATAS LAYAR
   async function executeReport() {
     if (!isServerConnected) return showToast("SERVER SEDANG OFFLINE", true);
 
@@ -1653,24 +1832,44 @@
 
     if (!target) return showToast("Masukkan nomor target!", true);
 
-    if (count > 1000) {
-      showToast("Batas maksimal report adalah 1000!", true);
+    if (selectedBugType === 'report' && count > 1000) {
+      showToast("Batas maksimal eksekusi adalah 1000!", true);
       count = 1000;
       document.getElementById('targetReportCount').value = 1000;
     }
 
-    const res = await fetch(`${getBackendUrl()}/api/send-report`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        targetPhone: target,
-        senderPhone: activeLocalSender,
-        isGlobal: (selectedSenderType === 'global'),
-        count: count
-      })
-    });
-    const data = await res.json();
-    if (data.error) showToast(data.error, true);
+    const btn = document.getElementById('btnExecuteAttack');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> MEMPROSES EKSEKUSI...`;
+
+    try {
+      const res = await fetch(`${getBackendUrl()}/api/send-report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          targetPhone: target,
+          senderPhone: activeLocalSender,
+          isGlobal: (selectedSenderType === 'global'),
+          count: count,
+          actionType: selectedBugType,
+          username: currentUser ? currentUser.username : "default"
+        })
+      });
+      const data = await res.json();
+
+      btn.disabled = false;
+      btn.innerHTML = `MULAI EKSEKUSI`;
+
+      if (data.error) {
+        showToast(data.error, true);
+      } else {
+        showToast("BERHASIL MENGEKSEKUSI TARGET!");
+      }
+    } catch(e) {
+      btn.disabled = false;
+      btn.innerHTML = `MULAI EKSEKUSI`;
+      showToast("Gagal terhubung ke server!", true);
+    }
   }
 
   async function handleResellerCreateAccount() {
