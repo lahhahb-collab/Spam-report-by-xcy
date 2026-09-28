@@ -867,7 +867,6 @@
   </div>
 
   <div class="drawer-menu-list font-tech">
-    <!-- SECURED DEFAULT HIDDEN FOR MEMBER ROLE -->
     <div class="drawer-item hidden" id="drawerConsoleBtn" onclick="openGlobalModal(); closeDrawer();">
       <i class="fa-solid fa-box-archive"></i>
       <span>CONSOLE KODE RENDEM</span>
@@ -1180,7 +1179,6 @@
     <i class="fa-brands fa-whatsapp"></i>
     <span class="font-tech">WHATSAPP</span>
   </div>
-  <!-- SECURED DEFAULT HIDDEN FOR MEMBER ROLE -->
   <div class="nav-tab hidden" id="navResellerItem" onclick="switchTab('Reseller', this)">
     <i class="fa-solid fa-user-plus"></i>
     <span class="font-tech">RESELLER</span>
@@ -1391,6 +1389,38 @@
       .subscribe();
   }
 
+  // MENGECEK APAKAH AKUN USER MASIH ADA DI DATABASE DENGAN KETAT
+  async function verifyAccountStatus() {
+    const savedUser = localStorage.getItem('xy_user_session');
+    if (!savedUser) return false;
+
+    try {
+      const parsed = JSON.parse(savedUser);
+
+      const { data, error } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('username', parsed.username)
+        .maybeSingle();
+
+      // Jika error, data tidak ada, atau password sudah beda (akun dihapus)
+      if (error || !data) {
+        localStorage.removeItem('xy_user_session');
+        currentUser = null;
+        document.getElementById('authOverlay').classList.remove('hidden');
+        showToast("Akun Anda telah dihapus oleh Admin!", true);
+        return false;
+      }
+
+      // Perbarui sesi lokal jika akun ada
+      currentUser = data;
+      localStorage.setItem('xy_user_session', JSON.stringify(data));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function selectBugOption(bugVal, element) {
     selectedBugType = bugVal;
     document.querySelectorAll('.bug-card-item').forEach(card => card.classList.remove('active'));
@@ -1463,9 +1493,9 @@
   window.addEventListener('DOMContentLoaded', async () => {
     initUpdateRealtime();
 
-    const savedUser = localStorage.getItem('xy_user_session');
-    if (savedUser) {
-      currentUser = JSON.parse(savedUser);
+    // Verifikasi keberadaan akun sebelum mengizinkan penggunaan website
+    const isValid = await verifyAccountStatus();
+    if (isValid && currentUser) {
       document.getElementById('authOverlay').classList.add('hidden');
       setupUserUI();
       
@@ -1699,7 +1729,6 @@
     } catch (e) {}
   }
 
-  // VALIDASI HAK AKSES ROLE SECARA KETAT
   function setupUserUI() {
     document.getElementById('dispUsername').innerText = currentUser.username;
     document.getElementById('dispRole').innerText = currentUser.role.toUpperCase();
