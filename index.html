@@ -405,7 +405,6 @@
     .quick-orange { background: var(--orange-accent); }
     .quick-title { font-size: 0.75rem; font-weight: 800; line-height: 1.2; }
 
-    /* KARTU STATUS SERVER BARU */
     .server-status-card {
       background: #ffffff;
       border: 3px solid var(--dark-border);
@@ -868,7 +867,8 @@
   </div>
 
   <div class="drawer-menu-list font-tech">
-    <div class="drawer-item" id="drawerConsoleBtn" onclick="openGlobalModal(); closeDrawer();">
+    <!-- SECURED DEFAULT HIDDEN FOR MEMBER ROLE -->
+    <div class="drawer-item hidden" id="drawerConsoleBtn" onclick="openGlobalModal(); closeDrawer();">
       <i class="fa-solid fa-box-archive"></i>
       <span>CONSOLE KODE RENDEM</span>
     </div>
@@ -966,7 +966,7 @@
       <button class="btn-neubrutal font-tech" onclick="submitRedeemCode()">KIRIM KODE</button>
     </div>
 
-    <!-- TAMPILAN KARTU STATUS SERVER BARU DI AREA KOTAK MERAH -->
+    <!-- TAMPILAN KARTU STATUS SERVER -->
     <div class="server-status-card" data-aos="fade-up" data-aos-duration="600">
       <div class="server-status-title font-tech">
         <i class="fa-solid fa-server" style="font-size: 1.2rem;"></i>
@@ -1180,6 +1180,7 @@
     <i class="fa-brands fa-whatsapp"></i>
     <span class="font-tech">WHATSAPP</span>
   </div>
+  <!-- SECURED DEFAULT HIDDEN FOR MEMBER ROLE -->
   <div class="nav-tab hidden" id="navResellerItem" onclick="switchTab('Reseller', this)">
     <i class="fa-solid fa-user-plus"></i>
     <span class="font-tech">RESELLER</span>
@@ -1259,7 +1260,7 @@
 
     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px;">
       <button class="font-tech" style="border:none; background:transparent; font-weight:800; cursor:pointer;" onclick="closePairingModal()">TUTUP</button>
-      <button class="btn-neubrutal font-tech" style="width:auto; padding:8px 16px; background:var(--yellow-bg); color:#000;" onclick="submitAddSender()">REFRESH</button>
+      <button class="btn-neubrutal font-tech" id="btnPairingRefresh" style="width:auto; padding:8px 16px; background:var(--yellow-bg); color:#000;" onclick="refreshPairingStatus()"><i class="fa-solid fa-rotate-right"></i> REFRESH</button>
     </div>
   </div>
 </div>
@@ -1698,6 +1699,7 @@
     } catch (e) {}
   }
 
+  // VALIDASI HAK AKSES ROLE SECARA KETAT
   function setupUserUI() {
     document.getElementById('dispUsername').innerText = currentUser.username;
     document.getElementById('dispRole').innerText = currentUser.role.toUpperCase();
@@ -1707,7 +1709,7 @@
     document.getElementById('drawerRole').innerText = currentUser.role.toUpperCase();
 
     const allowedRoles = ['reseller', 'founder', 'tk', 'vip', 'owner', 'owner2', 'owner3'];
-    const userRole = currentUser.role.toLowerCase();
+    const userRole = currentUser.role ? currentUser.role.toLowerCase() : '';
 
     if (allowedRoles.includes(userRole)) {
       document.getElementById('navResellerItem').classList.remove('hidden');
@@ -1849,6 +1851,45 @@
     
     await checkActiveSendersOnLoad();
     showToast("Sender berhasil dihapus!");
+  }
+
+  async function refreshPairingStatus() {
+    const btn = document.getElementById('btnPairingRefresh');
+    if (!btn) return;
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> LOADING...`;
+
+    const targetPhone = activeLocalSender || document.getElementById('addPhoneInput').value.trim();
+
+    if (!targetPhone || !currentUser) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> REFRESH`;
+      showStatusAlertModal(false, "SENDER TIDAK TERTAUT", "SENDER BELUM TERTAUT, SILAKAN PAIRING KODE TERLEBIH DAHULU");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${getBackendUrl()}/api/status?phone=${targetPhone}&username=${currentUser.username}`);
+      const data = await res.json();
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> REFRESH`;
+
+      if (data.connected) {
+        closePairingModal();
+        isSenderConnectedStatus = true;
+        updateSenderBadge();
+        await checkActiveSendersOnLoad();
+        showStatusAlertModal(true, "STATUS TERTAUT", "SENDER BERHASIL TERTAUT");
+      } else {
+        showStatusAlertModal(false, "SENDER TIDAK TERTAUT", "SENDER BELUM TERTAUT, SILAKAN PAIRING KODE TERLEBIH DAHULU");
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> REFRESH`;
+      showStatusAlertModal(false, "SERVER OFFLINE", "Gagal menghubungi server untuk cek status sender.");
+    }
   }
 
   async function refreshSenderStatus() {
@@ -2202,7 +2243,6 @@
     }
   }
 
-  // FUNGSI UNTUK MEMPERBARUI STATUS SERVER SECARA VISUAL (ONLINE HIJAU / OFFLINE MERAH)
   function updateServerStatusUI(online) {
     const statusBox = document.getElementById('homeServerStatusBox');
     if (!statusBox) return;
@@ -2224,7 +2264,7 @@
 
       ws.onopen = () => {
         isServerConnected = true;
-        updateServerStatusUI(true); // STATUS SERVER ONLINE
+        updateServerStatusUI(true);
         if (activeLocalSender) {
           ws.send(JSON.stringify({ type: "init_user", phone: activeLocalSender }));
         }
@@ -2247,17 +2287,17 @@
 
       ws.onerror = () => {
         isServerConnected = false;
-        updateServerStatusUI(false); // STATUS SERVER OFFLINE
+        updateServerStatusUI(false);
       };
 
       ws.onclose = () => {
         isServerConnected = false;
-        updateServerStatusUI(false); // STATUS SERVER OFFLINE
+        updateServerStatusUI(false);
         setTimeout(initWebSocket, 4000);
       };
     } catch(e) {
       isServerConnected = false;
-      updateServerStatusUI(false); // STATUS SERVER OFFLINE
+      updateServerStatusUI(false);
     }
   }
 </script>
