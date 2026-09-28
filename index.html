@@ -63,7 +63,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* TOAST NOTIFIKASI SEMENTARA DI ATAS LAYAR (3 - 5 DETIK) */
     #customToastContainer {
       position: fixed;
       top: 20px;
@@ -96,7 +95,6 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* AUTH OVERLAY MODAL */
     #authOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -119,7 +117,6 @@
       padding: 24px;
     }
 
-    /* TOP HEADER NAVBAR */
     .top-header {
       background: var(--yellow-bg);
       padding: 12px 20px;
@@ -163,7 +160,6 @@
       cursor: pointer;
     }
 
-    /* SIDEBAR DRAWER */
     .drawer-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -243,7 +239,6 @@
       text-align: center;
     }
 
-    /* CONTAINER LAYOUT */
     .app-container {
       max-width: 480px;
       margin: 0 auto;
@@ -253,7 +248,6 @@
       gap: 12px;
     }
 
-    /* HERO BANNER */
     .hero-banner {
       background: linear-gradient(135deg, #1e1b4b, #312e81, #4338ca);
       border: 3px solid var(--dark-border);
@@ -290,7 +284,6 @@
       box-shadow: 2px 2px 0px var(--dark-border);
     }
 
-    /* WELCOME & USER CARD */
     .user-card {
       background: var(--card-bg);
       border: 3px solid var(--dark-border);
@@ -338,7 +331,6 @@
       margin-top: 2px;
     }
 
-    /* STATS INNER ROW */
     .stats-row {
       background: var(--white-card);
       border: 2.5px solid var(--dark-border);
@@ -360,10 +352,9 @@
 
     .stat-col:last-child { border-right: none; }
     .stat-col i { font-size: 0.95rem; color: #000; }
-    .stat-val { font-size: 0.78rem; font-weight: 800; }
-    .stat-lbl { font-size: 0.68rem; color: var(--muted); font-weight: 700; }
+    .stat-val { font-size: 0.88rem; font-weight: 800; }
+    .stat-lbl { font-size: 0.65rem; color: var(--muted); font-weight: 800; }
 
-    /* FEATURE CARDS ROW */
     .features-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -391,7 +382,6 @@
       margin-bottom: 4px;
     }
 
-    /* QUICK ACTION GRID */
     .quick-grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr;
@@ -415,7 +405,48 @@
     .quick-orange { background: var(--orange-accent); }
     .quick-title { font-size: 0.75rem; font-weight: 800; line-height: 1.2; }
 
-    /* SENDER SELECTOR GRID */
+    /* KARTU STATUS SERVER BARU */
+    .server-status-card {
+      background: #ffffff;
+      border: 3px solid var(--dark-border);
+      border-radius: 18px;
+      box-shadow: 4px 4px 0px var(--dark-border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .server-status-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .server-status-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--dark-border);
+      box-shadow: 2px 2px 0px var(--dark-border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .server-status-val.online {
+      background: var(--green-accent);
+      color: #ffffff;
+    }
+
+    .server-status-val.offline {
+      background: var(--red-accent);
+      color: #ffffff;
+    }
+
     .sender-selector-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -445,7 +476,6 @@
       color: #000;
     }
 
-    /* PILIH BUG SLIDER HORIZONTAL */
     .bug-scroll-container {
       display: flex;
       gap: 12px;
@@ -538,7 +568,6 @@
       margin-top: 6px;
     }
 
-    /* FORM STYLES */
     .form-group { margin-bottom: 10px; }
     label { display: block; font-size: 0.72rem; font-weight: 800; margin-bottom: 4px; }
     input, select {
@@ -563,7 +592,6 @@
       box-shadow: 3px 3px 0px var(--dark-border);
     }
 
-    /* TERMINAL LOG DISPLAY */
     .terminal-box {
       background: #111111;
       color: #00ff66;
@@ -577,7 +605,6 @@
       box-shadow: 4px 4px 0px var(--dark-border);
     }
 
-    /* BOTTOM NAV */
     .bottom-navbar {
       position: fixed;
       bottom: 0;
@@ -607,7 +634,6 @@
     .nav-tab i { font-size: 1.2rem; }
     .nav-tab.active { opacity: 1; color: var(--orange-accent); }
 
-    /* NO SENDER VIEW */
     .no-sender-box {
       display: flex;
       flex-direction: column;
@@ -675,7 +701,6 @@
       z-index: 999;
     }
 
-    /* MODAL POPUPS */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0;
@@ -734,7 +759,6 @@
       margin: 8px 0;
     }
 
-    /* CONNECTED SENDER CARD */
     .sender-item-card {
       background: #ffffff;
       border: 3.5px solid var(--dark-border);
@@ -761,13 +785,39 @@
       font-size: 0.75rem;
       font-weight: 800;
     }
+
+    .sender-badge-disconnected {
+      background: var(--red-accent);
+      color: #fff;
+      border: 2px solid var(--dark-border);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
   </style>
 </head>
 <body>
 
 <div id="customToastContainer"></div>
 
-<!-- MODAL UPDATE APLIKASI (OTOMATIS MUNCUL JIKA DIPICU DARI UPDATE.HTML) -->
+<!-- MODAL STATUS REFRESH TERTAUT / TIDAK TERTAUT -->
+<div id="statusAlertModal" class="modal-backdrop hidden" style="z-index: 999999;">
+  <div class="modal-card" style="text-align: center;">
+    <div id="statusAlertIconBox" style="width:60px; height:60px; border-radius:50%; background:var(--green-accent); border:3px solid #000; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#fff;">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    
+    <div>
+      <div class="font-tech" style="font-size: 1.15rem; font-weight: 800;" id="statusAlertTitle">STATUS TERTAUT</div>
+      <p style="font-size: 0.85rem; font-weight: 700; color: var(--muted); margin-top: 6px;" id="statusAlertMessage">SENDER BERHASIL TERTAUT</p>
+    </div>
+
+    <button class="btn-neubrutal font-tech" style="background: var(--yellow-bg); color: #000;" onclick="closeStatusAlertModal()">OK</button>
+  </div>
+</div>
+
+<!-- MODAL UPDATE APLIKASI -->
 <div id="appUpdateModal" class="modal-backdrop hidden" style="z-index: 999999;">
   <div class="modal-card" style="text-align: center;">
     <div style="width:60px; height:60px; border-radius:50%; background:var(--orange-accent); border:3px solid #000; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">
@@ -859,20 +909,21 @@
         </div>
       </div>
 
+      <!-- SENDER ONLINE DAN OFFLINE JUMLAH KARTU -->
       <div class="stats-row">
         <div class="stat-col">
-          <i class="fa-solid fa-satellite-dish"></i>
-          <span class="stat-val font-tech" id="statusOnline">ACTIVE</span>
-          <span class="stat-lbl font-tech">ONLINE</span>
+          <i class="fa-solid fa-signal" style="color: var(--green-accent);"></i>
+          <span class="stat-val font-tech" id="statOnlineCount">0</span>
+          <span class="stat-lbl font-tech">SENDER ONLINE</span>
         </div>
         <div class="stat-col">
-          <i class="fa-solid fa-paper-plane"></i>
-          <span class="stat-val font-tech" id="statusSenderText">OFF</span>
-          <span class="stat-lbl font-tech">SENDER</span>
+          <i class="fa-solid fa-power-off" style="color: var(--red-accent);"></i>
+          <span class="stat-val font-tech" id="statOfflineCount">0</span>
+          <span class="stat-lbl font-tech">SENDER OFFLINE</span>
         </div>
         <div class="stat-col">
           <i class="fa-solid fa-calendar-days"></i>
-          <span class="stat-val font-tech" id="dispExp">-</span>
+          <span class="stat-val font-tech" id="dispExp" style="font-size: 0.72rem;">-</span>
           <span class="stat-lbl font-tech">EXPIRED</span>
         </div>
       </div>
@@ -915,6 +966,17 @@
       <button class="btn-neubrutal font-tech" onclick="submitRedeemCode()">KIRIM KODE</button>
     </div>
 
+    <!-- TAMPILAN KARTU STATUS SERVER BARU DI AREA KOTAK MERAH -->
+    <div class="server-status-card" data-aos="fade-up" data-aos-duration="600">
+      <div class="server-status-title font-tech">
+        <i class="fa-solid fa-server" style="font-size: 1.2rem;"></i>
+        <span>STATUS SERVER</span>
+      </div>
+      <div id="homeServerStatusBox" class="server-status-val offline font-tech">
+        <i class="fa-solid fa-circle-xmark"></i> OFFLINE
+      </div>
+    </div>
+
   </div>
 
   <!-- TAB MANAGE SENDER -->
@@ -931,13 +993,13 @@
       <div class="sender-item-card">
         <div class="sender-top-row">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width:36px; height:36px; border-radius:50%; background:var(--green-accent); border:2px solid #000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:0.9rem;"><i class="fa-solid fa-check"></i></div>
+            <div id="connectedIconBox" style="width:36px; height:36px; border-radius:50%; background:var(--green-accent); border:2px solid #000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:0.9rem;"><i class="fa-solid fa-check"></i></div>
             <div>
-              <div class="font-tech" style="font-weight:800; font-size:1rem;" id="connectedSessionName">anjayy</div>
-              <div style="font-size:0.8rem; font-weight:700; color:var(--muted);" id="connectedPhoneNum">6287875609316</div>
+              <div class="font-tech" style="font-weight:800; font-size:1rem;" id="connectedSessionName">Session</div>
+              <div style="font-size:0.8rem; font-weight:700; color:var(--muted);" id="connectedPhoneNum">62xxxxxxxxx</div>
             </div>
           </div>
-          <div class="sender-badge-connected font-tech">Connected</div>
+          <div id="senderConnectStatusBadge" class="sender-badge-connected font-tech">Connected</div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -974,10 +1036,9 @@
 
       <div class="form-group">
         <label class="font-tech">NOMOR TARGET REPORT</label>
-        <input type="text" id="targetReportPhone" placeholder="+628/628/08">
+        <input type="text" id="targetReportPhone" placeholder="6287875609316">
       </div>
 
-      <!-- PILIH BUG SLIDER HORIZONTAL -->
       <div class="form-group" style="margin-bottom: 12px;">
         <label class="font-tech"><i class="fa-solid fa-bug"></i> PILIH BUG</label>
         <div class="bug-scroll-container">
@@ -1040,7 +1101,6 @@
         </div>
       </div>
 
-      <!-- JUMLAH EKSEKUSI HANYA TAMPIL JIKA PILIH REPORT TARGET -->
       <div class="form-group" id="containerCountInput" style="margin-bottom:12px;">
         <label class="font-tech">JUMLAH EKSEKUSI (MAX 1000)</label>
         <input type="number" id="targetReportCount" value="5" min="1" max="1000">
@@ -1049,7 +1109,6 @@
       <button class="btn-neubrutal font-tech" id="btnExecuteAttack" style="background: var(--red-accent);" onclick="executeReport()">MULAI EKSEKUSI</button>
     </div>
 
-    <!-- TERMINAL CONSOLE HANYA TAMPIL JIKA PILIH REPORT TARGET -->
     <div id="containerTerminalConsole" style="margin-top: 10px;" data-aos="fade-up">
       <div class="section-label font-tech" style="margin-bottom: 6px;">TERMINAL CONSOLE</div>
       <div class="terminal-box" id="terminalLogBox">
@@ -1260,13 +1319,13 @@
       </div>
     </div>
 
-    <div id="limitStatusText" class="font-tech" style="font-size: 0.78rem; font-weight: 800; color: #333; margin-bottom: 10px; text-align: center; background: var(--card-bg); padding: 6px; border: 2px solid #000; border-radius: 8px;">
+    <div id="limitStatusText" class="font-tech" style="font-size: 0.78rem; font-weight: 800; color: #333; margin-bottom: 10px; text-align: center; background: var(--card-bg); padding: 8px; border: 2.5px solid #000; border-radius: 10px;">
       SISA LIMIT: <span id="limitCountVal" style="color: #000;">5/5</span>
     </div>
 
-    <button class="btn-neubrutal font-tech" onclick="generateGlobalCode()">CREATE KODE RENDEM</button>
+    <button class="btn-neubrutal font-tech" id="btnGenGlobalCode" onclick="generateGlobalCode()">CREATE KODE RENDEM</button>
     
-    <div id="genResultBox" class="hidden" style="margin-top: 12px; background: #fff; padding: 10px; border: 2px solid #000; border-radius: 8px; text-align: center; max-height: 150px; overflow-y: auto;">
+    <div id="genResultBox" class="hidden" style="margin-top: 12px; background: #fff; padding: 10px; border: 2.5px solid #000; border-radius: 10px; text-align: center; max-height: 150px; overflow-y: auto;">
       <div id="genResultVal" class="font-tech" style="font-weight: 800; word-break: break-all; font-size: 0.8rem; text-align: left;"></div>
     </div>
   </div>
@@ -1277,31 +1336,30 @@
 <script>
   AOS.init({ duration: 600, once: false, easing: 'ease-out-cubic' });
 
-  // SUPABASE CONFIG (SISTEM USER & UPDATE)
   const SUPABASE_URL_USER = "https://mqvpjvgulfotlbtjgojw.supabase.co";
   const SUPABASE_KEY_USER = "sb_publishable_QG5aNX5L9w-HINgOow-5Ug_rcNxm8TW";
   const supabaseClient = supabase.createClient(SUPABASE_URL_USER, SUPABASE_KEY_USER);
 
-  // SUPABASE KHUSUS FITUR UPDATE
   const SUPABASE_URL_UPDATE = "https://czearfmiqddnqtailckb.supabase.co";
   const SUPABASE_KEY_UPDATE = "sb_publishable_cB9eiLcaI4vtGK6E7NaxRQ_w3lIRTbb";
   const updateSupabase = supabase.createClient(SUPABASE_URL_UPDATE, SUPABASE_KEY_UPDATE);
 
-  const MANUAL_BACKEND_URL = "https://positions-terrain-fortune-foundation.trycloudflare.com"; 
+  const MANUAL_BACKEND_URL = "https://straight-commissions-preventing-kathy.trycloudflare.com"; 
   let getBackendUrl = () => MANUAL_BACKEND_URL || window.location.origin;
 
   let currentUser = null;
   let activeLocalSender = null;
   let activeSessionName = "";
+  let isSenderConnectedStatus = false;
   let hasGlobalAccess = false;
   let selectedSenderType = 'me';
   let selectedBugType = 'report';
   let ws = null;
   let isServerConnected = false;
   let countdownInterval = null;
+  let limitTimerInterval = null;
   let toastTimeout = null;
 
-  // FITUR CEK UPDATE TERBARU SECARA REALTIME DARI UPDATE.HTML
   async function checkSystemUpdate() {
     try {
       const { data } = await updateSupabase
@@ -1322,7 +1380,6 @@
     } catch(e) {}
   }
 
-  // Buka Realtime Listener ke Supabase untuk Update
   function initUpdateRealtime() {
     checkSystemUpdate();
     updateSupabase
@@ -1378,6 +1435,30 @@
     }, 4000);
   }
 
+  function showStatusAlertModal(isSuccess, title, message) {
+    const modal = document.getElementById('statusAlertModal');
+    const iconBox = document.getElementById('statusAlertIconBox');
+    const titleEl = document.getElementById('statusAlertTitle');
+    const msgEl = document.getElementById('statusAlertMessage');
+
+    titleEl.innerText = title;
+    msgEl.innerText = message;
+
+    if (isSuccess) {
+      iconBox.style.background = "var(--green-accent)";
+      iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
+    } else {
+      iconBox.style.background = "var(--red-accent)";
+      iconBox.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  function closeStatusAlertModal() {
+    document.getElementById('statusAlertModal').classList.add('hidden');
+  }
+
   window.addEventListener('DOMContentLoaded', async () => {
     initUpdateRealtime();
 
@@ -1396,6 +1477,19 @@
 
   async function loadGlobalSenderData() {
     if (!currentUser) return;
+
+    const role = currentUser.role ? currentUser.role.toLowerCase() : '';
+    if (role === 'vip' || role === 'founder') {
+      hasGlobalAccess = true;
+      localStorage.setItem('xy_global_access_' + currentUser.username, 'true');
+      const dispVal = document.getElementById('dispGlobalExpVal');
+      if (dispVal) {
+        dispVal.innerText = "UNLIMITED";
+        dispVal.style.background = "var(--green-accent)";
+        dispVal.style.color = "#fff";
+      }
+      return;
+    }
     
     const expKey = 'xy_global_exp_' + currentUser.username;
     let savedExp = localStorage.getItem(expKey);
@@ -1423,6 +1517,15 @@
     const updateTimer = () => {
       const dispVal = document.getElementById('dispGlobalExpVal');
       if (!dispVal) return;
+
+      const role = currentUser.role ? currentUser.role.toLowerCase() : '';
+      if (role === 'vip' || role === 'founder') {
+        hasGlobalAccess = true;
+        dispVal.innerText = "UNLIMITED";
+        dispVal.style.background = "var(--green-accent)";
+        dispVal.style.color = "#fff";
+        return;
+      }
 
       if (!expiryISO) {
         if (localStorage.getItem('xy_global_access_' + currentUser.username) === 'true') {
@@ -1568,15 +1671,29 @@
       const res = await fetch(`${getBackendUrl()}/api/active-senders?username=${currentUser.username}`);
       const data = await res.json();
 
+      let onlineCount = 0;
+      let offlineCount = 0;
+
       if (data.senders && data.senders.length > 0) {
-        const active = data.senders[0];
+        data.senders.forEach(s => {
+          if (s.connected) onlineCount++;
+          else offlineCount++;
+        });
+
+        const active = data.senders.find(s => s.phone === activeLocalSender) || data.senders[0];
         activeLocalSender = active.phone;
         activeSessionName = active.sessionName;
+        isSenderConnectedStatus = active.connected;
         localStorage.setItem('xy_active_sender_' + currentUser.username, JSON.stringify({ phone: activeLocalSender, sessionName: activeSessionName }));
       } else {
         activeLocalSender = null;
         activeSessionName = "";
+        isSenderConnectedStatus = false;
       }
+
+      document.getElementById('statOnlineCount').innerText = onlineCount;
+      document.getElementById('statOfflineCount').innerText = offlineCount;
+
       updateSenderBadge();
     } catch (e) {}
   }
@@ -1712,7 +1829,7 @@
   async function logoutSender() {
     if (!activeLocalSender || !currentUser) return;
 
-    showToast("Memproses logout dari WhatsApp...");
+    showToast("Memproses hapus sender...");
 
     try {
       await fetch(`${getBackendUrl()}/api/logout-sender`, {
@@ -1727,24 +1844,36 @@
 
     activeLocalSender = null;
     activeSessionName = "";
+    isSenderConnectedStatus = false;
     localStorage.removeItem('xy_active_sender_' + currentUser.username);
-    updateSenderBadge();
-    showToast("Berhasil Log Out dari WhatsApp!");
+    
+    await checkActiveSendersOnLoad();
+    showToast("Sender berhasil dihapus!");
   }
 
   async function refreshSenderStatus() {
-    if (!activeLocalSender || !currentUser) return;
+    if (!activeLocalSender || !currentUser) {
+      showStatusAlertModal(false, "SENDER TIDAK TERTAUT", "SENDER BELUM TERTAUT, ADD SENDER ULANG");
+      return;
+    }
+
     try {
       const res = await fetch(`${getBackendUrl()}/api/status?phone=${activeLocalSender}&username=${currentUser.username}`);
       const data = await res.json();
+
       if (data.connected) {
+        isSenderConnectedStatus = true;
         updateSenderBadge();
-        showToast("Status Sender Terhubung!");
+        await checkActiveSendersOnLoad();
+        showStatusAlertModal(true, "STATUS TERTAUT", "SENDER BERHASIL TERTAUT");
       } else {
-        showToast("Sender tidak terhubung.", true);
+        isSenderConnectedStatus = false;
+        updateSenderBadge();
+        await checkActiveSendersOnLoad();
+        showStatusAlertModal(false, "SENDER TIDAK TERTAUT", "SENDER BELUM TERTAUT, ADD SENDER ULANG");
       }
     } catch(e) {
-      showToast("SERVER SEDANG OFFLINE", true);
+      showStatusAlertModal(false, "SERVER OFFLINE", "Gagal menghubungi server untuk cek status sender.");
     }
   }
 
@@ -1752,35 +1881,106 @@
     const badge = document.getElementById('senderStatusBadge');
     const noSenderView = document.getElementById('noSenderView');
     const connectedSenderView = document.getElementById('connectedSenderView');
+    const connectStatusBadge = document.getElementById('senderConnectStatusBadge');
+    const connectIconBox = document.getElementById('connectedIconBox');
 
     if (selectedSenderType === 'global' && hasGlobalAccess) {
       badge.style.background = "var(--orange-accent)";
       badge.innerText = "GLOBAL SENDER";
     } else if (activeLocalSender) {
-      badge.style.background = "var(--green-accent)";
+      badge.style.background = isSenderConnectedStatus ? "var(--green-accent)" : "var(--red-accent)";
       badge.innerText = "SENDER 1";
 
       noSenderView.classList.add('hidden');
       connectedSenderView.classList.remove('hidden');
       document.getElementById('connectedSessionName').innerText = activeSessionName;
       document.getElementById('connectedPhoneNum').innerText = activeLocalSender;
-      document.getElementById('statusSenderText').innerText = "Active";
+
+      if (isSenderConnectedStatus) {
+        connectStatusBadge.className = "sender-badge-connected font-tech";
+        connectStatusBadge.innerText = "Connected";
+        connectIconBox.style.background = "var(--green-accent)";
+        connectIconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
+      } else {
+        connectStatusBadge.className = "sender-badge-disconnected font-tech";
+        connectStatusBadge.innerText = "Disconnected";
+        connectIconBox.style.background = "var(--red-accent)";
+        connectIconBox.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+      }
     } else {
       badge.style.background = "var(--red-accent)";
       badge.innerText = "NO SENDER";
 
       noSenderView.classList.remove('hidden');
       connectedSenderView.classList.add('hidden');
-      document.getElementById('statusSenderText').innerText = "Off";
     }
   }
 
   function updateLimitDisplay() {
     if (!currentUser) return;
+
+    const role = currentUser.role ? currentUser.role.toLowerCase() : '';
+    const isUnlimited = (role === 'vip' || role === 'founder');
+
+    const limitVal = document.getElementById('limitCountVal');
+    const btn = document.getElementById('btnGenGlobalCode');
+
+    if (isUnlimited) {
+      limitVal.innerText = "UNLIMITED";
+      limitVal.style.color = "green";
+      btn.disabled = false;
+      return;
+    }
+
     const countKey = 'xy_gen_count_' + currentUser.username;
+    const cooldownKey = 'xy_gen_cooldown_' + currentUser.username;
+
     let currentGenCount = parseInt(localStorage.getItem(countKey)) || 0;
+    let cooldownEnd = parseInt(localStorage.getItem(cooldownKey)) || 0;
+    const now = new Date().getTime();
+
+    if (cooldownEnd > 0) {
+      if (now >= cooldownEnd) {
+        localStorage.removeItem(cooldownKey);
+        localStorage.setItem(countKey, '0');
+        currentGenCount = 0;
+        if (limitTimerInterval) clearInterval(limitTimerInterval);
+      } else {
+        btn.disabled = true;
+        if (limitTimerInterval) clearInterval(limitTimerInterval);
+
+        limitTimerInterval = setInterval(() => {
+          const currentNow = new Date().getTime();
+          const rem = cooldownEnd - currentNow;
+
+          if (rem <= 0) {
+            clearInterval(limitTimerInterval);
+            localStorage.removeItem(cooldownKey);
+            localStorage.setItem(countKey, '0');
+            limitVal.innerText = "5/5";
+            limitVal.style.color = "#000";
+            btn.disabled = false;
+          } else {
+            const m = Math.floor(rem / 60000);
+            const s = Math.floor((rem % 60000) / 1000);
+            limitVal.innerText = `RESET DALAM: ${m}m ${s < 10 ? '0' + s : s}s`;
+            limitVal.style.color = "red";
+          }
+        }, 1000);
+
+        const rem = cooldownEnd - now;
+        const m = Math.floor(rem / 60000);
+        const s = Math.floor((rem % 60000) / 1000);
+        limitVal.innerText = `RESET DALAM: ${m}m ${s < 10 ? '0' + s : s}s`;
+        limitVal.style.color = "red";
+        return;
+      }
+    }
+
     const sisa = 5 - currentGenCount;
-    document.getElementById('limitCountVal').innerText = `${sisa <= 0 ? 0 : sisa}/5`;
+    limitVal.innerText = `${sisa <= 0 ? 0 : sisa}/5`;
+    limitVal.style.color = "#000";
+    btn.disabled = (sisa <= 0);
   }
 
   function openGlobalModal() { 
@@ -1789,6 +1989,7 @@
   }
 
   function closeGlobalModal() { 
+    if (limitTimerInterval) clearInterval(limitTimerInterval);
     document.getElementById('globalModal').classList.add('hidden'); 
   }
 
@@ -1796,12 +1997,18 @@
     const qty = parseInt(document.getElementById('globalCountSelect').value) || 1;
     const days = parseInt(document.getElementById('globalDaysSelect').value) || 1;
 
+    const role = currentUser.role ? currentUser.role.toLowerCase() : '';
+    const isUnlimited = (role === 'vip' || role === 'founder');
+
     const countKey = 'xy_gen_count_' + currentUser.username;
+    const cooldownKey = 'xy_gen_cooldown_' + currentUser.username;
     let currentGenCount = parseInt(localStorage.getItem(countKey)) || 0;
 
-    if (currentGenCount + qty > 5) {
-      const sisa = 5 - currentGenCount;
-      return showToast(`Batas maksimal total generate adalah 5 kode! Anda hanya bisa membuat ${sisa <= 0 ? 0 : sisa} kode lagi.`, true);
+    if (!isUnlimited) {
+      if (currentGenCount + qty > 5) {
+        const sisa = 5 - currentGenCount;
+        return showToast(`Batas maksimal total generate adalah 5 kode! Sisa kuota: ${sisa <= 0 ? 0 : sisa}.`, true);
+      }
     }
 
     const insertedCodes = [];
@@ -1824,8 +2031,16 @@
     if (insertedCodes.length === 0) {
       showToast("Gagal membuat kode redeem!", true);
     } else {
-      currentGenCount += insertedCodes.length;
-      localStorage.setItem(countKey, currentGenCount);
+      if (!isUnlimited) {
+        currentGenCount += insertedCodes.length;
+        localStorage.setItem(countKey, currentGenCount);
+
+        if (currentGenCount >= 5) {
+          const cooldownTime = new Date().getTime() + (5 * 60 * 1000);
+          localStorage.setItem(cooldownKey, cooldownTime.toString());
+        }
+      }
+
       updateLimitDisplay();
 
       const resultBox = document.getElementById('genResultBox');
@@ -1987,6 +2202,20 @@
     }
   }
 
+  // FUNGSI UNTUK MEMPERBARUI STATUS SERVER SECARA VISUAL (ONLINE HIJAU / OFFLINE MERAH)
+  function updateServerStatusUI(online) {
+    const statusBox = document.getElementById('homeServerStatusBox');
+    if (!statusBox) return;
+
+    if (online) {
+      statusBox.className = "server-status-val online font-tech";
+      statusBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> ONLINE`;
+    } else {
+      statusBox.className = "server-status-val offline font-tech";
+      statusBox.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> OFFLINE`;
+    }
+  }
+
   function initWebSocket() {
     const wsUrl = getBackendUrl().replace(/^http/, 'ws');
     
@@ -1995,7 +2224,7 @@
 
       ws.onopen = () => {
         isServerConnected = true;
-        document.getElementById('statusOnline').innerText = "ACTIVE";
+        updateServerStatusUI(true); // STATUS SERVER ONLINE
         if (activeLocalSender) {
           ws.send(JSON.stringify({ type: "init_user", phone: activeLocalSender }));
         }
@@ -2008,7 +2237,9 @@
           openPairingModal(data.code, data.sessionName, data.phone);
         } else if (data.type === 'status' && data.connected) {
           closePairingModal();
+          isSenderConnectedStatus = true;
           updateSenderBadge();
+          checkActiveSendersOnLoad();
         } else if (data.type === 'terminal_log') {
           appendTerminalLog(data.log);
         }
@@ -2016,17 +2247,17 @@
 
       ws.onerror = () => {
         isServerConnected = false;
-        document.getElementById('statusOnline').innerText = "OFF";
+        updateServerStatusUI(false); // STATUS SERVER OFFLINE
       };
 
       ws.onclose = () => {
         isServerConnected = false;
-        document.getElementById('statusOnline').innerText = "OFF";
+        updateServerStatusUI(false); // STATUS SERVER OFFLINE
         setTimeout(initWebSocket, 4000);
       };
     } catch(e) {
       isServerConnected = false;
-      document.getElementById('statusOnline').innerText = "OFF";
+      updateServerStatusUI(false); // STATUS SERVER OFFLINE
     }
   }
 </script>
